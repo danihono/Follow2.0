@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Follow Advisor</title>
+
+  <!-- Fontes (título estreito + texto) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+     <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bellota+Text:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
+
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/button-effects.css">
+    <link rel="stylesheet" href="css/hero-background.css">
+    <link rel="stylesheet" href="css/hero-styles.css">
+  
+    <link rel="stylesheet" href="styles.css" />
+  
+  <script src="js/script.js" defer></script>
+  <script src="js/cards.js" defer></script>
+<script src="js/split-hero.js" defer></script>
+<script src="js/./featuresection.js" defer></script>
+
+
+</head>
+<body>
+  <!-- Cabeçalho / Navegação -->
+  <header class="site-header">
+    <nav class="nav container">
+    <div id="logo"><img src="images/logo.png" alt="logo">
+    </div>
+     
+      <input id="nav-toggle" type="checkbox" class="nav-toggle" aria-label="Abrir menu">
+      <label for="nav-toggle" class="nav-burger" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </label>
+
+      <ul class="nav-links" id="menu">
+        <li><a href="#inicio">INÍCIO</a></li>
+        <li><a href="#sobre">SOBRE NÓS</a></li>
+        <li><a href="#servicos">SERVIÇOS</a></li>
+        <li><a href="#equipe">EQUIPE</a></li>
+        <li><a href="#contato">CONTATO</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a class="btn btn-ghost" href="#">Sign in</a>
+        <a class="btn btn-primary" href="#">Register</a>
+      </div>
+    </nav>
+  </header>
+
+  <section class="hero" id="inicio" aria-label="Seção inicial">
+  <!-- Vídeo de fundo -->
+  <video class="hero-bg"
+         autoplay
+         muted
+         loop
+         playsinline
+         preload="auto"
+         poster="images/video/poster-inicio.jpg">
+    <source src="images/video/inicio.mp4" type="video/mp4" />
+    Seu navegador não suporta vídeo HTML5.
+  </video>
+<div class="hero-dim" aria-hidden="true"></div>
+
+  <!-- Sombra/gradiente sobre o vídeo -->
+  <div class="hero-shade" aria-hidden="true"></div>
+
+  <!-- Conteúdo -->
+  <div class="hero-inner container">
+    <h1 class="hero-title">ORIENTAÇÃO QUE INSPIRA</h1>
+    <p class="hero-subtitle">
+      Consultoria e assessoria especializada em Qualidade e Supply-Chain
+    </p>
+  </div>
+</section>
+
+<section id="about" class="section py-5">
+  <div class="container">
+
+    <div class="row mb-5 wipe">
+      <div class="col-12">
+        <h2 class="section-title about-title" data-i18n="about-title">
+          Sobre a Follow Advisor
+        </h2>
+      </div>
+    </div>
+
+    <div class="row" data-stagger="140">
+      <div class="col-lg-6">
+        <p class="lead reveal" data-reveal="up" data-i18n="about-description">
+          A Follow Advisor é uma empresa de consultoria e assessoria em Qualidade e Supply-Chain...
+        </p>
+      </div>
+    </div>
+
+    <!-- Orbit de cards com vidro + conteúdo -->
+<!-- BLOCO: TEXTOS à ESQUERDA | CARROSSEL à DIREITA -->
+  <section class="section orbit-block">
+    <div class="container orbit-grid">
+
+      <!-- ESQUERDA: (deixe vazio por enquanto; depois você preenche) -->
+      <div class="orbit-copy"> 
+        <h2>Qualidade e Supply Chain que entregam resultado.</h2>
+        <p>Somos a <b>Follow Advisor</b> consultoria e assessoria com 7 anos de atuação, especializada em Assuntos Regulatórios (ANVISA e órgãos anuentes), Qualidade, Cadeia Fria, Licenças e projetos completos de Supply Chain e Armazenagem. Nosso time reúne 20+ anos de experiência em transporte de produtos para saúde, operações logísticas e desenho de soluções sob medida — com transparência, tecnologia e análises profundas dos seus processos.</p>
+
+      </div>
+       
+
+      <!-- DIREITA: CARROSSEL deslocado -->
+      <div class="orbit-stage">
+        <!-- ajuste o deslocamento como quiser: px ou % -->
+        <div class="wrapper" style="--orbit-shift: 120px;">
+          <div class="inner" style="--quantity: 10;">
+
+            <!-- CARD 0 -->
+            <div class="card" style="--index:0; --color-card:142,249,252;">
+              <div class="img"></div><div class="glass"></div>
+              <div class="content">
+                <h2 class="kpi"><span class="num counter" data-count="90" data-prefix="+" data-duration="3000">0</span></h2>
+                <p class="caption">Empresas homologadas na ANVISA</p>
+              </div>
+            </div>
+
+            <!-- CARD 1 -->
+            <div class="card" style="--index:1; --color-card:142,252,204;">
+              <div class="img"></div><div class="glass"></div>
+              <div class="content">
+                <h2 class="kpi"><span class="num counter" data-count="70" data-prefix="+" data-duration="3000">0</span></h2>
+                <p class="caption">Indústrias farmacêuticas atendidas</p>
+              </div>
+            </div>
+
+            <!-- CARD 2 -->
+            <div class="card" style="--index:2; --color-card:142,252,157;">
+              <div class="img"></div><div class="glass"></div>
+              <div class="content">
+                <h2 class="kpi"><span class="num counter" data-count="1200" data-prefix="+" data-duration="3000">0</span></h2>
+                <p class="caption">Auditorias de Qualidade realizadas</p>
+              </div>
+            </div>
+
+            <!-- CARD 3 (LONGO) -->
+            <div class="card" style="--index:3; --color-card:215,252,142;">
+              <div class="img"></div><div class="glass"></div>
+              <div class="content">
+                <h2 class="kpi kpi--long">
+                  <span class="num counter" data-count="120000" data-prefix="+" data-format="pt-BR" data-duration="3200">0</span>
+                </h2>
+                <p class="caption">Toneladas de produtos importados</p>
+              </div>
+            </div>
+
+            <!-- CARD 4 (6500) -->
+            <div class="card" style="--index:4; --color-card:252,252,142;">
+              <div class="img"></div><div class="glass"></div>
+              <div class="content">
+                <h2 class="kpi"><span class="num counter" data-count="6500" data-prefix="+" data-duration="3000">0</span></h2>
+                <p class="caption">Veículos sob gestão de Qualidade</p>
+              </div>
+            </div>
+
+            <!-- CARD 5 (DINHEIRO) -->
+            <div class="card" style="--index:5; --color-card:252,208,142;">
+              <div class="img"></div><div class="glass"></div>
+              <div class="content">
+                <h2 class="kpi kpi--money">
+                  <span class="num counter" data-count="500" data-prefix="+R$ " data-suffix="M" data-format="pt-BR" data-duration="3400">0</span>
+                  <span class="sub">/mês</span>
+                </h2>
+                <p class="caption">Cargas com qualificação de rotas mensais</p>
+              </div>
+            </div>
+
+            <!-- CARD 6 -->
+            <div class="card" style="--index:6; --color-card:142,249,252;">
+              <div class="img"></div><div class="glass"></div>
+              <div class="content">
+                <h2 class="kpi"><span class="num counter" data-count="90" data-prefix="+" data-duration="3000">0</span></h2>
+                <p class="caption">Empresas homologadas na ANVISA</p>
+              </div>
+            </div>
+
+            <!-- CARD 7 -->
+            <div class="card" style="--index:7; --color-card:142,252,204;">
+              <div class="img"></div><div class="glass"></div>
+              <div class="content">
+                <h2 class="kpi"><span class="num counter" data-count="70" data-prefix="+" data-duration="3000">0</span></h2>
+                <p class="caption">Indústrias farmacêuticas atendidas</p>
+              </div>
+            </div>
+
+            <!-- CARD 8 -->
+            <div class="card" style="--index:8; --color-card:142,252,157;">
+              <div class="img"></div><div class="glass"></div>
+              <div class="content">
+                <h2 class="kpi"><span class="num counter" data-count="1200" data-prefix="+" data-duration="3000">0</span></h2>
+                <p class="caption">Auditorias de Qualidade realizadas</p>
+              </div>
+            </div>
+
+            <!-- CARD 9 (6500) -->
+            <div class="card" style="--index:9; --color-card:252,252,142;">
+              <div class="img"></div><div class="glass"></div>
+              <div class="content">
+                <h2 class="kpi"><span class="num counter" data-count="6500" data-prefix="+" data-duration="3000">0</span></h2>
+                <p class="caption">Veículos sob gestão de Qualidade</p>
+              </div>
+            </div>
+
+          </div><!-- /.inner -->
+        </div><!-- /.wrapper -->
+      </div><!-- /.orbit-stage -->
+
+    </div><!-- /.container .orbit-grid -->
+
+  </div>
+</div>
+
+  </div>
+</div>
+</div>
+  </div>
+<section class="presence">
+  <h2 class="presence-title">Presença LATAM e América do Norte</h2>
+
+  <div class="presence-row">
+    <!-- ESQUERDA: dois cards -->
+    <div class="cards-presenca">
+      <!-- CARD: Nacional (Brasil) -->
+      <div class="city-card" id="card-br">
+        <button class="arrow prev" aria-label="Anterior">‹</button>
+        <div class="city">
+          <img class="photo" src="images/cities/sp.jpg" alt="São Paulo">
+          <div class="label">
+            <span class="tag">Brasil</span>
+            <h3 class="name">São Paulo</h3>
+          </div>
+        </div>
+        <button class="arrow next" aria-label="Próximo">›</button>
+      </div>
+
+      <!-- CARD: Internacional -->
+      <div class="city-card" id="card-int">
+        <button class="arrow prev" aria-label="Anterior">‹</button>
+        <div class="city">
+          <img class="photo" src="images/cities/miami.jpg" alt="Miami (EUA)">
+          <div class="label">
+            <span class="tag">Internacional</span>
+            <h3 class="name">Miami (EUA)</h3>
+          </div>
+        </div>
+        <button class="arrow next" aria-label="Próximo">›</button>
+      </div>
+    </div>
+
+    <!-- DIREITA: mapa menor -->
+   <!-- DIREITA: mapa com vídeo de fundo -->
+<aside class="presence-map" aria-label="Mapa de atuação">
+  <video class="presence-video"
+         autoplay
+         muted
+         loop
+         playsinline
+         preload="auto"
+         poster="images/video/map.mp4">
+    <source src="images/video/map.mp4" type="video/mp4" />
+    Seu navegador não suporta vídeo HTML5.
+  </video>
+
+  <!-- escurecimento opcional, ajuste a opacidade no CSS -->
+  <div class="presence-dim" aria-hidden="true"></div>
+</aside>
+
+</section>
+<!-- DIVISÃO – Alcance Global -->
+<section id="alcance" class="split-hero">
+  <!-- Slides de fundo (troque as imagens pelos seus arquivos) -->
+  <div class="slides">
+    <img src="images\hero-bg\bg-1.jpg" alt="Equipe em reunião">
+    <img src="images\hero-bg\bg-2.jpg"alt="Operações logísticas">
+    <img src="images\hero-bg\bg-3.jpg" alt="Parceiros globais">
+    <img src="images\hero-bg\bg-4.jpg" alt="Parceiros globais">
+    <img src="images\hero-bg\bg-5.jpg" alt="Parceiros globais">
+    <img src="images\hero-bg\bg-6.jpg" alt="Parceiros globais">
+    <img src="images\hero-bg\bg-7.jpg" alt="Parceiros globais">
+  </div>
+
+  <!-- Card na frente -->
+  <div class="panel">
+    <h2>Alcance Global, Expertise Local</h2>
+    <p>
+      Nossa rede abrange continentes, garantindo que suas necessidades logísticas
+      sejam atendidas com precisão e cuidado, não importa o destino.
+    </p>
+  </div>
+</section><br>
+<br>
+<br>
+  <section class="timeline-wrap" aria-labelledby="tl-title">
+  <h2 id="tl-title" class="sr-only">Nossos Serviços</h2>
+<!-- Linha vertical fixa (progresso acompanha a rolagem) -->
+<div class="v-rail " aria-hidden="true">
+  <div class="v-progress" id="v-progress"></div>
+</div>
+
+  <!-- Faixa horizontal com snap -->
+  <div class="hscroll" id="hscroll" aria-label="Timeline de serviços (rolagem horizontal)">
+    <!-- Cada etapa .step contém 1 card (imagem) + textos embaixo  -->
+
+    <!-- 01 -->
+    <article class="step" data-step="01">
+      <button class="tech-card"
+        data-title="Assuntos Regulatórios"
+        data-desc="Assessoria completa em licenciamento, certificações e adequação às normas."
+        aria-label="Assuntos Regulatórios">
+        <img src="images/icons/qualificacao.png" alt="qualificacao">
+        <span class="tag">Regulatório</span>
+        <span class="title">Assuntos Regulatórios</span>
+      </button>
+      <h3 class="step-title">Assuntos Regulatórios</h3>
+      <p class="step-text">Assessoria completa em licenciamento, certificações e adequação às normas regulatórias.</p>
+    </article>
+
+    <!-- 02 -->
+    <article class="step" data-step="02">
+      <button class="tech-card"
+        data-title="Estudos de Qualificação"
+        data-desc="Qualificação térmica e validação de processos conforme normas nacionais e internacionais."
+        aria-label="Estudos de Qualificação">
+        <img src="images/icons/termometro.png" alt="termometro">
+        <span class="tag">Validação</span>
+        <span class="title">Estudos de Qualificação</span>
+      </button>
+      <h3 class="step-title">Nosso método é simples</h3>
+      <p class="step-text">Planejamento, execução e documentação com rastreabilidade total.</p>
+    </article>
+
+    <!-- 03 -->
+    <article class="step" data-step="03">
+      <button class="tech-card"
+        data-title="Supply Chain e Comércio Exterior"
+        data-desc="Desenvolvimento e otimização de cadeias logísticas nacionais e internacionais."
+        aria-label="Supply Chain e Comércio Exterior">
+        <img src="images/icons/mundo.png" alt="mundo">
+        <span class="tag">Supply Chain</span>
+        <span class="title">Comércio Exterior</span>
+      </button>
+      <h3 class="step-title">Supply que performa</h3>
+      <p class="step-text">Eficiência ponta a ponta, do planejamento ao desembaraço.</p>
+    </article>
+
+    <!-- 04 (com vídeo) -->
+    <article class="step" data-step="04">
+      <button class="tech-card"
+        data-title="Logística, Transportes e Armazenagem"
+        data-desc="Assessoria completa em operações logísticas, transporte e armazenamento."
+        data-video="images/video/caminhao.mp4"
+        aria-label="Logística, Transportes e Armazenagem">
+        <img src="images/icons/transporte.png" alt="caminhaooo">
+        <span class="tag">Logística</span>
+        <span class="title">Transportes & Armazenagem</span>
+      </button>
+      <h3 class="step-title">Mover com precisão</h3>
+      <p class="step-text">Rotas otimizadas, controle de risco e visibilidade operacional.</p>
+    </article>
+
+    <!-- 05 -->
+    <article class="step" data-step="05">
+      <button class="tech-card"
+        data-title="Qualidade"
+        data-desc="Implementação e gestão de sistemas de qualidade e certificações."
+        aria-label="Qualidade">
+        <img src="images\icons\selo.png" alt="selo">
+        <span class="tag">Qualidade</span>
+        <span class="title">Sistemas & Certificação</span>
+      </button>
+      <h3 class="step-title">Qualidade que sustenta</h3>
+      <p class="step-text">Processos, indicadores e cultura orientada a melhoria contínua.</p>
+    </article>
+
+    <!-- 06 -->
+    <article class="step" data-step="06">
+      <button class="tech-card"
+        data-title="Assessoria para Distribuidoras Médicas"
+        data-desc="Consultoria especializada para distribuidoras de dispositivos médicos e produtos para saúde."
+        aria-label="Assessoria para Distribuidoras Médicas">
+        <img src="images\icons\medico.png" alt="med">
+        <span class="tag">Saúde</span>
+        <span class="title">Distribuidoras Médicas</span>
+      </button>
+      <h3 class="step-title">Saúde em foco</h3>
+      <p class="step-text">Especialização em cadeia fria, ANVISA e boas práticas.</p>
+    </article>
+
+    <!-- 07 -->
+    <article class="step" data-step="07">
+      <button class="tech-card"
+        data-title="Treinamento e Qualificação"
+        data-desc="Programas de capacitação e desenvolvimento de equipes técnicas e operacionais."
+        aria-label="Treinamento e Qualificação">
+        <img src="images\icons\educacao.png" alt="ed">
+        <span class="tag">Treinamento</span>
+        <span class="title">Qualificação</span>
+      </button>
+      <h3 class="step-title">Time preparado</h3>
+      <p class="step-text">Capacitação prática, aplicada ao dia a dia da operação.</p>
+    </article>
+
+    <!-- 08 -->
+    <article class="step" data-step="08">
+      <button class="tech-card"
+        data-title="Armazenagem e Distribuição"
+        data-desc="Soluções para armazenagem e distribuição em cadeia fria e temperatura ambiente."
+        aria-label="Armazenagem e Distribuição">
+        <img src="images\icons\caixas.png" alt="cai">
+        <span class="tag">Operações</span>
+        <span class="title">Armazenagem & Distribuição</span>
+      </button>
+      <h3 class="step-title">Estocar com inteligência</h3>
+      <p class="step-text">Layout, WMS e KPIs para máxima acurácia e giro.</p>
+    </article>
+
+    <!-- 09 -->
+    <article class="step" data-step="09">
+      <button class="tech-card"
+        data-title="Jurídico Corporativo"
+        data-desc="Softlanding, compliance e mitigação de risco trabalhista com parceiros presenciais."
+        aria-label="Jurídico Corporativo">
+        <img src="images\icons\balanca.png" alt="balanca">
+        <span class="tag">Compliance</span>
+        <span class="title">Jurídico Corporativo</span>
+      </button>
+      <h3 class="step-title">Risco sob controle</h3>
+      <p class="step-text">Governança, conformidade e prevenção de passivos.</p>
+    </article>
+
+    <!-- 10 -->
+    <article class="step" data-step="10">
+      <button class="tech-card"
+        data-title="Consultoria de Comércio Exterior"
+        data-desc="Regimes especiais, otimização de custos e soluções para comércio internacional."
+        aria-label="Consultoria de Comércio Exterior">
+        <img src="images/icons/aviao.png" alt="aviao">
+        <span class="tag">Trade</span>
+        <span class="title">Consultoria de Comex</span>
+      </button>
+      <h3 class="step-title">Trade sem atrito</h3>
+      <p class="step-text">Estratégia fiscal e aduaneira para competir globalmente.</p>
+    </article>
+  </div>
+</section>
+
+<!-- OVERLAY (zoom de imagem/vídeo) -->
+<div id="zoom-overlay" aria-hidden="true">
+  <div class="zoom-card" role="dialog" aria-modal="true" aria-label="Detalhes do serviço">
+    <button class="close-zoom" aria-label="Fechar">✕</button>
+    <h3 class="zoom-title"></h3>
+    <div class="zoom-media"></div>
+    <p class="zoom-desc"></p>
+  </div>
+</div>
+
+
+
+    </div>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+                    
+</body>
+</html>

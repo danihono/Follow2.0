@@ -1,0 +1,1300 @@
+/* ================== Variáveis & Reset ================== */
+:root{
+  /* Fundo global e fade entre seções */
+  --surface: #0b0b0b;
+  --fade-size: 56px;
+  
+
+  /* Hero (se quiser usar via background) */
+  --hero-image: url('minha-imagem-hero.jpg');
+
+  /* Paleta */
+  --clr-bg: #0b0b0b;
+  --clr-white: #ffffff;
+  --clr-white-80: rgba(255,255,255,.85);
+  --clr-white-60: rgba(255,255,255,.60);
+  --accent: #2FA3FF;
+
+  /* Layout */
+  --container: 1200px;
+
+  /* Tipos (troque se quiser) */
+  --ff-display: "Bebas Neue", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  --ff-body: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+
+  /* Hero subtitle offset (ajuste fino) */
+  --subtitle-push: 400px; /* empurra o subtítulo pra direita */
+  
+}
+
+*{ box-sizing: border-box; }
+html, body{ height: 100%; background: var(--surface); }
+body{
+  margin: 0;
+  font-family: var(--ff-body);
+  color: var(--clr-white);
+  background: var(--clr-bg);
+  line-height: 1.5;
+}
+
+.container{
+  width: min(92vw, var(--container));
+  margin-inline: auto;
+}
+
+/* ===== Utilitário de transição entre seções ===== */
+/* Substitua o seu bloco .section por este */
+.section{
+  position: relative;
+  background: var(--surface);
+  isolation: isolate;
+  color: inherit;                 /* <- não força preto no texto */
+  --fade-color: var(--surface);   /* cor do fade da emenda entre seções */
+}
+.section::before{
+  content: "";
+  position: absolute;
+  left: 0; right: 0;
+  top: calc(-1 * var(--fade-size));
+  height: var(--fade-size);
+  background: linear-gradient(to bottom, transparent, var(--fade-color));
+  pointer-events: none;
+  opacity: .9;
+}
+.section > :first-child{ margin-top: 0; }
+
+/* ================== Navegação ================== */
+.site-header{
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;
+  backdrop-filter: blur(6px);
+  background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.05), transparent);
+}
+
+.nav{
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  padding: .60rem 0;
+}
+
+#logo{ display: flex; align-items: center; }
+#logo img{ height: 50px; width: auto; display: block; }
+
+.nav-links{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav-links a{
+  text-decoration: none;
+  font-size: .78rem;
+  letter-spacing: .18em;
+  color: var(--clr-white-80);
+  text-transform: uppercase;
+  transition: opacity .2s ease;
+}
+.nav-links a:hover{ opacity: .8; }
+
+.nav-actions{ display:flex; align-items:center; gap:.6rem; }
+
+.btn{
+  display: inline-block;
+  padding: .5rem .9rem;
+  border-radius: 999px;
+  font-size: .78rem;
+  text-decoration: none;
+  letter-spacing: .02em;
+  line-height: 1;
+  transition: filter .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
+}
+.btn-ghost{
+  background: rgba(255,255,255,.08);
+  color: var(--clr-white);
+  border: 1px solid rgba(255,255,255,.18);
+}
+.btn-ghost:hover{ filter: brightness(1.1); }
+.btn-primary{
+  background: var(--accent);
+  color: #001223;
+  border: 1px solid rgba(255,255,255,.12);
+  font-weight: 600;
+}
+.btn-primary:hover{ filter: brightness(1.05); }
+
+/* Burger (se usar) */
+.nav-toggle{ display:none; }
+.nav-burger{
+  display:none; width:36px; height:36px;
+  align-items:center; justify-content:center; cursor:pointer;
+}
+.nav-burger span{
+  display:block; width:22px; height:2px; background: var(--clr-white);
+  margin:4px 0; transition: transform .2s ease, opacity .2s ease;
+}
+
+@media (max-width: 960px){
+  .nav{ grid-template-columns: auto auto auto; }
+  .nav-actions{ display:none; }
+}
+
+/* ================== HERO ================== */
+.hero{
+  position: relative;
+  height: 100svh;
+  width: 100%;
+  display: grid;
+  align-items: end;
+  overflow: hidden;
+  isolation: isolate; /* evita sombras vazarem para a próxima seção */
+}
+
+.hero-bg{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform: translateZ(0);
+}
+
+/* Camada de gradiente cobrindo todo o hero */
+.hero-shade{
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,.05) 0%,
+    rgba(0,0,0,.10) 25%,
+    rgba(0,0,0,.35) 55%,
+    var(--surface) 100%
+  );
+  pointer-events: none;
+}
+
+.hero-inner{
+  position: relative;
+  z-index: 1;
+  padding: 0 0 8vh;
+  padding-left: clamp(8px, 2.5vw, 24px);
+}
+
+.hero-title{
+  font-family: "Anton", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  line-height: .9;
+  margin-left: 0;
+  font-size: clamp(3rem, 8vw, 7rem);
+  text-shadow: 0 2px 0 rgba(0,0,0,.15), 0 12px 28px rgba(0,0,0,.45);
+}
+
+.hero .container{ width:100%; margin:0; }
+
+/* Subtítulo com “empurrão” ajustável */
+.hero-subtitle{
+  margin: .4rem 0 0 0;
+  transform: translateX(var(--subtitle-push));
+}
+
+/* ================== Seção Sobre ================== */
+#about{
+  padding-block: clamp(56px, 8vw, 120px);
+  background: #0b0b0b;
+}
+
+#about .about-title{
+  font-family: "Anton", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  line-height: .9;
+  margin: 0;
+  color: #fff;
+  font-size: clamp(2.2rem, 6vw, 4.2rem);
+  text-shadow: 0 2px 0 rgba(0,0,0,.15), 0 12px 28px rgba(0,0,0,.45);
+  position: relative;
+}
+#about .about-title::after{
+  content: "";
+  display: block;
+  width: clamp(64px, 10vw, 140px);
+  height: 4px;
+  margin-top: 14px;
+  background: #2FA3FF;
+  border-radius: 999px;
+}
+#about p.lead{
+  font-family: "Bellota Text", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-weight: 400;
+  color: rgba(255,255,255,.9);
+  font-size: clamp(1rem, 1.3vw, 1.125rem);
+  line-height: 1.65;
+  margin: 8px 0 0 0;
+  max-width: 62ch;
+}
+
+@media (max-width: 992px){
+  #about .about-title{ font-size: clamp(2rem, 8vw, 3.2rem); }
+  #about p.lead{ max-width: 65ch; }
+}
+/* Visível por padrão */
+.reveal{ opacity:1; transform:none; filter:none; }
+
+/* Quando o JS sinaliza que está pronto, aplica animações */
+.fx-ready .reveal{
+  opacity:0; transform: translateY(24px); filter: blur(6px);
+  transition: opacity .7s ease, transform .7s ease, filter .7s ease;
+  will-change: opacity, transform, filter;
+}
+.fx-ready .reveal.in{ opacity:1; transform:none; filter:none; }
+
+/* Direções e wipe continuam iguais */
+.reveal[data-reveal="left"]{ transform: translateX(-28px); }
+.reveal[data-reveal="right"]{ transform: translateX(28px); }
+.reveal[data-reveal="up"]{ transform: translateY(24px); }
+.reveal[data-reveal="scale"]{ transform: scale(.96); }
+
+.wipe{ position:relative; overflow:hidden; }
+.wipe::after{
+  content:""; position:absolute; inset:0; background:rgba(255,255,255,.06);
+  transform:translateX(-101%); transition:transform .8s ease;
+}
+.fx-ready .wipe.in::after{ transform:translateX(101%); }
+
+
+@media (prefers-reduced-motion: reduce){
+  .reveal, .wipe{ transition:none !important; }
+  .reveal{ opacity:1; transform:none; filter:none; }
+  .wipe::after{ display:none; }
+}
+/* ----- CARROSSEL 3D ----- */
+
+/* ---------- Orbit 3D base ---------- */
+/* ================== Orbit 3D + Glass ================== */
+.wrapper{
+  width: 100%;
+  min-height: 60vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.inner{
+  --w: 120px;                 /* largura do card (controla fontes também) */
+  --h: 180px;
+  --translateZ: calc(var(--w) + var(--h));
+  --rotateX: -15deg;
+  --perspective: 1000px;
+
+  position: absolute;
+  width: var(--w);
+  height: var(--h);
+  top: 25%;
+  left: calc(50% - (var(--w) / 2));
+  z-index: 1;
+
+  transform-style: preserve-3d;
+  transform: perspective(var(--perspective));
+  animation: rotating 20s linear infinite;
+}
+
+@keyframes rotating{
+  from{ transform: perspective(var(--perspective)) rotateX(var(--rotateX)) rotateY(0turn); }
+  to  { transform: perspective(var(--perspective)) rotateX(var(--rotateX)) rotateY(1turn); }
+}
+
+/* ---------- Variáveis do vidro (uma vez só) ---------- */
+:root{
+  --card-radius: 12px;
+  --glass-inset: 8px;
+  --glass-blur: 14px;
+  --glass-shadow: 0 8px 24px rgba(0,0,0,.25);
+  --glass-tint: 124 201 255;                 /* 7CC9FF */
+}
+
+/* ---------- Card (sem fundo do Bootstrap) ---------- */
+.wrapper .card{
+  position: absolute;
+  inset: 0;
+  border: none !important;
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  background: transparent !important;
+  box-shadow: none !important;
+  transition: transform .25s ease, filter .25s ease;
+  will-change: transform, filter;
+
+  transform:
+    rotateY(calc((360deg / var(--quantity)) * var(--index)))
+    translateZ(var(--translateZ));
+}
+
+/* Camadas fixas (sempre na ordem certa) */
+.wrapper .card .img{ position:absolute; inset:0; z-index:0; }
+.wrapper .card .glass{ position:absolute; inset:var(--glass-inset); z-index:1; }
+.wrapper .card .content{
+  position:absolute;
+  z-index:2;
+  inset: calc(var(--glass-inset) + 12px) 14px 14px 14px; /* mais respiro */
+  display:grid;
+  align-content:end;
+  gap:6px;
+  color:#fff;
+  text-align:left;
+  text-shadow:0 2px 8px rgba(0,0,0,.45);
+  pointer-events:none; /* clique passa pro card */
+  overflow:hidden;     /* evita vazamento de texto */
+}
+
+/* Evita sumiço ao girar em 3D */
+.wrapper .card,
+.wrapper .card .img,
+.wrapper .card .glass,
+.wrapper .card .content{
+  backface-visibility:hidden;
+  transform-style:flat;
+}
+
+/* Fundo translúcido colorido */
+.wrapper .card .img{
+  background:
+    radial-gradient(circle,
+      rgb(var(--color-card) / 0.20) 0%,
+      rgb(var(--color-card) / 0.60) 80%,
+      rgb(var(--color-card) / 0.90) 100%);
+}
+
+/* ---------- Vidro (glassmorphism) ---------- */
+.wrapper .card .glass{
+  border-radius: calc(var(--card-radius) - var(--glass-inset));
+  background: rgb(var(--glass-tint) / .14);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(120%);
+          backdrop-filter: blur(var(--glass-blur)) saturate(120%);
+  border: 1px solid rgb(var(--glass-tint) / .45);
+  box-shadow: var(--glass-shadow), inset 0 1px 0 rgb(var(--glass-tint) / .35);
+  overflow:hidden;
+}
+.wrapper .card .glass::before{
+  content:"";
+  position:absolute; top:10px; left:10px; right:10px; height:18%;
+  border-radius:10px;
+  background: linear-gradient(to bottom, rgb(var(--glass-tint) / .55), transparent);
+  opacity:.9; mix-blend-mode: screen; pointer-events:none;
+}
+.wrapper .card .glass::after{
+  content:""; position:absolute; inset:0; border-radius:inherit;
+  box-shadow: inset 0 0 0 2px rgb(var(--glass-tint));
+  pointer-events:none;
+}
+
+/* ---------- Tipografia dentro do card ---------- */
+/* Número grande (usa --w pra limitar) */
+.wrapper .card .content h2{
+  margin:0 0 4px 0;
+  font-family:"Anton", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-weight:700;
+  line-height:1.0;
+  letter-spacing:.01em;
+  color: rgb(var(--glass-tint));
+  text-shadow:0 2px 10px rgba(0,0,0,.45);
+  font-size: clamp(22px, min(4.8vw, calc(var(--w) * 0.34)), 44px);
+  white-space: nowrap; /* evita quebrar */
+}
+
+.wrapper .card .content p{
+  margin:0;
+  font-family:"Bellota Text", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-weight:400;
+  font-size: clamp(11px, min(2.6vw, calc(var(--w) * 0.12)), 14px);
+  line-height:1.25;
+  color: rgba(255,255,255,.92);
+}
+
+/* ---------- Hover sutil (continua girando) ---------- */
+.wrapper .card:hover{
+  z-index:6;
+  transform:
+    rotateY(calc((360deg / var(--quantity)) * var(--index)))
+    translateZ(calc(var(--translateZ) + 38px))
+    scale(1.015);
+  filter: drop-shadow(0 8px 22px rgba(0,0,0,.28));
+}
+.wrapper .card:hover .glass{
+  -webkit-backdrop-filter: blur(calc(var(--glass-blur) + 2px)) saturate(118%);
+          backdrop-filter: blur(calc(var(--glass-blur) + 2px)) saturate(118%);
+}
+.wrapper .card:hover .glass::after{
+  box-shadow: inset 0 0 0 2px rgba(124 201 255 / .85);
+}
+/* NÃO esconda a “costas” do card inteiro */
+.wrapper .card{
+  backface-visibility: visible;    /* <- mostra frente e costas */
+  transform-style: preserve-3d;
+}
+
+/* Pode manter hidden só nas camadas internas para evitar tremular */
+.wrapper .card .img,
+.wrapper .card .glass,
+.wrapper .card .content{
+  backface-visibility: hidden;
+}
+
+/* Ordem das camadas garantida */
+.wrapper .card .img{ position:absolute; inset:0; z-index:0; }
+.wrapper .card .glass{ position:absolute; inset:var(--glass-inset); z-index:1; }
+.wrapper .card .content{
+  position:absolute; z-index:2;
+  inset: calc(var(--glass-inset) + 12px) 14px 14px 14px;
+  pointer-events:none;
+}
+
+/* Hover continua suave (sem mexer em opacity do texto) */
+.wrapper .card{
+  transition: transform .25s ease, filter .25s ease;
+}
+.wrapper .card:hover{
+  z-index: 6;
+  transform:
+    rotateY(calc((360deg / var(--quantity)) * var(--index)))
+    translateZ(calc(var(--translateZ) + 38px))
+    scale(1.015);
+  filter: drop-shadow(0 8px 22px rgba(0,0,0,.28));
+}
+/* respiro um pouco maior nas laterais */
+.wrapper .card .content{
+  inset: calc(var(--glass-inset) + 12px) 16px 14px 16px;
+}
+
+/* base para KPI */
+.wrapper .card .content .kpi{
+  margin: 0 0 4px 0;
+  font-family: "Anton", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  line-height: 1;
+  letter-spacing: .01em;
+  color: rgb(var(--glass-tint));
+  text-shadow: 0 2px 10px rgba(0,0,0,.45);
+  white-space: nowrap;                /* não quebra por padrão */
+}
+
+/* número padrão (cartões curtos) */
+.wrapper .card .content .kpi .num{
+  display: block;
+  /* limita pelo tamanho do card (--w) e pela viewport */
+  font-size: clamp(22px, min(4.6vw, calc(var(--w) * 0.30)), 40px);
+}
+
+/* números LONGOS (ex.: +120.000) */
+.wrapper .card .content .kpi.kpi--long{ white-space: normal; } /* pode quebrar se preciso */
+.wrapper .card .content .kpi.kpi--long .num{
+  font-size: clamp(20px, min(3.6vw, calc(var(--w) * 0.25)), 34px);
+}
+
+/* valor em DINHEIRO (ex.: +R$ 500M /mês) */
+.wrapper .card .content .kpi.kpi--money{ white-space: normal; }
+.wrapper .card .content .kpi.kpi--money .num{
+  letter-spacing: .01em;
+  font-size: clamp(18px, min(3.2vw, calc(var(--w) * 0.22)), 30px);
+}
+.wrapper .card .content .kpi.kpi--money .sub{
+  display: block;
+  margin-top: 2px;
+  font-size: clamp(12px, min(2.6vw, calc(var(--w) * 0.16)), 18px);
+  color: rgb(var(--glass-tint));
+  opacity: .95;
+}
+
+/* legenda */
+.wrapper .card .content .caption{
+  margin: 4px 0 0 0;
+  font-family: "Bellota Text", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-weight: 400;
+  font-size: clamp(11px, min(2.6vw, calc(var(--w) * 0.12)), 14px);
+  line-height: 1.25;
+  color: rgba(255,255,255,.92);
+}
+/* --- Ajuste fino dos KPIs (menores e seguros) --- */
+
+/* respiro lateral um pouquinho maior */
+.wrapper .card .content{
+  inset: calc(var(--glass-inset) + 12px) 18px 14px 18px;
+}
+
+/* base do KPI (p/ cartões “normais”) */
+.wrapper .card .content .kpi{
+  margin: 0 0 4px 0;
+  font-family: "Anton", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  line-height: 1;
+  letter-spacing: .005em;
+  color: rgb(var(--glass-tint));
+  text-shadow: 0 2px 10px rgba(0,0,0,.45);
+  white-space: nowrap; /* padrão: não quebra */
+}
+
+.wrapper .card .content .kpi .num{
+  display: block;
+  /* BEM menor agora (limita pela largura do card --w) */
+  font-size: clamp(18px, min(3.4vw, calc(var(--w) * 0.22)), 30px);
+}
+
+/* números LONGOS (ex.: +120.000) */
+.wrapper .card .content .kpi.kpi--long{ white-space: normal; word-break: keep-all; }
+.wrapper .card .content .kpi.kpi--long .num{
+  font-size: clamp(16px, min(2.8vw, calc(var(--w) * 0.18)), 26px);
+}
+
+/* valor em DINHEIRO (ex.: +R$ 500M /mês) */
+.wrapper .card .content .kpi.kpi--money{ white-space: normal; }
+.wrapper .card .content .kpi.kpi--money .num{
+  letter-spacing: .002em;
+  font-size: clamp(16px, min(2.6vw, calc(var(--w) * 0.17)), 24px);
+}
+.wrapper .card .content .kpi.kpi--money .sub{
+  display: block;
+  margin-top: 2px;
+  font-size: clamp(12px, min(2.2vw, calc(var(--w) * 0.14)), 18px);
+  color: rgb(var(--glass-tint));
+  opacity: .95;
+}
+
+/* legenda */
+.wrapper .card .content .caption{
+  margin: 4px 0 0 0;
+  font-family: "Bellota Text", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-weight: 400;
+  font-size: clamp(11px, min(2.4vw, calc(var(--w) * 0.11)), 13px);
+  line-height: 1.25;
+  color: rgba(255,255,255,.92);
+}
+/* ---------- tamanhos corretos ---------- */
+
+/* padrão (todos os KPIs “normais”) */
+.wrapper .card .content .kpi .num{
+  font-size: clamp(22px, min(4.6vw, calc(var(--w) * 0.30)), 40px);
+}
+
+/* dinheiro (/mês) – um pouquinho menor que o padrão */
+.wrapper .card .content .kpi.kpi--money .num{
+  font-size: clamp(20px, min(4vw, calc(var(--w) * 0.24)), 34px);
+}
+.wrapper .card .content .kpi.kpi--money .sub{
+  font-size: clamp(12px, min(2.6vw, calc(var(--w) * 0.16)), 18px);
+}
+
+/* SOMENTE o longo: +120.000 */
+.wrapper .card .content .kpi.kpi--long{ white-space: normal; }
+.wrapper .card .content .kpi.kpi--long .num{
+  font-size: clamp(16px, min(2.8vw, calc(var(--w) * 0.18)), 26px);
+}
+/* diminui APENAS os cards com --index:4 e --index:9 (seus dois 6500) */
+.wrapper .card[style*="--index:4"] .kpi .num,
+.wrapper .card[style*="--index:9"] .kpi .num,
+.wrapper .card[style*="--index:8"] .kpi .num,
+.wrapper .card[style*="--index:2"] .kpi .num{
+  font-size: clamp(20px, min(3.6vw, calc(var(--w) * 0.24)), 32px);
+}
+/* Grid: esquerda (texto) | direita (carrossel) */
+.orbit-grid{
+  display: grid;
+  grid-template-columns: 1fr min(540px, 46vw);
+  align-items: center;
+  gap: clamp(16px, 4vw, 56px);
+  padding-block: clamp(40px, 6vw, 80px);
+}
+
+/* Espaços prontos (não mudam sua tipografia) */
+.orbit-copy .about-title{ margin: 0 0 .5rem 0; }
+.orbit-copy .lead{ margin: 0 0 1rem 0; max-width: 60ch; }
+.orbit-bullets{ margin: 0; padding-left: 1.1rem; }
+
+/* Responsivo: empilha e recentraliza o carrossel */
+@media (max-width: 992px){
+  .orbit-grid{ grid-template-columns: 1fr; }
+  .orbit-stage .wrapper{ --orbit-shift: 0px; } /* zera empurrão no mobile */
+}
+.orbit-copy h2{
+  color: #ffffff;
+  font-family: "Anton", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-weight:700;
+  text-transform: none;               /* ou 'uppercase' se preferir */
+  letter-spacing: .01em;
+  line-height: .9;
+  /* maior de verdade: mínimo 42px, sobe bem no desktop */
+  font-size: clamp(3rem, 2vw, 2rem);
+}
+.orbit-copy p{
+  font-family: "Barlow Semi Condensed", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-weight: 500;                   /* 400 se quiser mais leve */
+  letter-spacing: .01em;
+  line-height: 1.6;
+  font-size: clamp(1.0625rem, 1.25vw, 1.375rem);  /* ~17–22px */
+  max-width: 62ch;                    /* boa largura de leitura */
+  color: rgba(255,255,255,.95);
+}
+.orbit-copy b{
+  color:#2FA3FF;
+}
+
+@keyframes autoRun3d {
+  from {
+    transform: perspective(800px) rotateY(-360deg);
+  }
+  to {
+    transform: perspective(800px) rotateY(0deg);
+  }
+}
+
+@keyframes animateBrightness {
+  10% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(0.1);
+  }
+  90% {
+    filter: brightness(1);
+  }
+}
+
+/* layout dos dois cards lado a lado */
+.cards-presenca{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: clamp(16px, 3vw, 32px);
+  align-items: center;
+  justify-items: center;
+}
+
+/* contêiner do card (setas + bloco .city) */
+.city-card{
+  position: relative;
+  display: grid;
+  grid-template-columns: auto;
+  align-items: center;
+  gap: .5rem;
+}
+
+/* === CARD base (efeito da sua borda girando) === */
+.city{
+  width: 210px;                /* ajuste livre */
+  height: 280px;               /* ajuste livre */
+  background: #07182E;
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 20px;
+  isolation: isolate;          /* para sobreposições ficarem corretas */
+}
+
+/* FOTO */
+.city .photo{
+  position: absolute;
+  inset: 6px;                  /* respeita o “miolo” depois da borda animada */
+  width: calc(100% - 12px);
+  height: calc(100% - 12px);
+  object-fit: cover;
+  border-radius: 14px;
+  z-index: 1;
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+/* gradiente para leitura da legenda */
+.city::after{
+  content: "";
+  position: absolute;
+  left: 6px; right: 6px; bottom: 6px;
+  height: 36%;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.7) 100%);
+  z-index: 2;
+}
+
+/* legenda */
+.city .label{
+  position: absolute;
+  left: 14px; right: 14px; bottom: 12px;
+  z-index: 3;
+  color: #fff;
+  font-family: "Barlow Semi Condensed", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+.city .label .tag{
+  display: inline-block;
+  font-size: .72rem;
+  padding: .2rem .5rem;
+  border-radius: 999px;
+  background: rgba(47,163,255,.2);
+  border: 1px solid rgba(47,163,255,.45);
+  color: #9fd6ff;
+  margin-bottom: .35rem;
+}
+.city .label .name{
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.1;
+  font-weight: 700;
+  text-shadow: 0 2px 10px rgba(0,0,0,.6);
+}
+
+/* sua borda animada */
+.city::before{
+  content: "";
+  position: absolute;
+  width: 120px;
+  height: 140%;
+  background-image: linear-gradient(180deg, rgb(0, 183, 255), rgb(0, 183, 255));
+  animation: rotBGimg 15s linear infinite;
+  transition: background-image .2s linear, animation-duration .2s linear;
+  z-index: 0;
+}
+.city:hover::before{
+  background-image: linear-gradient(180deg, rgb(252, 252, 252), rgb(255, 255, 255));
+  animation-duration: 15s;
+}
+@keyframes rotBGimg{
+  from{ transform: rotate(0deg); }
+  to  { transform: rotate(360deg); }
+}
+
+/* setas */
+.city-card .arrow{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.25);
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  display: grid; place-items: center;
+  font-size: 20px;
+  cursor: pointer;
+  transition: filter .2s ease, background .2s ease, transform .15s ease;
+  z-index: 4;
+}
+.city-card .arrow:hover{ filter: brightness(1.15); }
+.city-card .arrow:active{ transform: translateY(-50%) scale(.96); }
+
+.city-card .prev{ left: -14px; }
+.city-card .next{ right: -14px; }
+
+/* responsivo: dá mais espaço às setas se precisar */
+@media (max-width: 480px){
+  .city{ width: 190px; height: 254px; }
+  .city-card .prev{ left: -10px; }
+  .city-card .next{ right: -10px; }
+}
+/* grid: cards à esquerda | mapa ocupa o resto */
+.presence-row{
+  display: grid;
+  grid-template-columns: min-content 1fr;  /* cards na largura mínima, mapa no resto */
+  align-items: start;
+  gap: clamp(16px, 3vw, 32px);
+}
+
+/* reaproveita o alinhamento à esquerda dos cards */
+.cards-presenca{
+  display: flex;
+  gap: clamp(14px, 2.5vw, 28px);
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-left: clamp(16px, 5vw, 64px);
+}
+
+/* área do mapa (placeholder) */
+.presence-map{
+  min-height: 380px;             /* ajuste quando plugar o mapa real */
+  border-radius: 16px;
+  background: radial-gradient(120% 80% at 40% 0%, rgba(47,163,255,.08), transparent 60%),
+              rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.12);
+}
+
+/* mobile: empilha e mantém tudo à esquerda */
+@media (max-width: 900px){
+  .presence-row{ grid-template-columns: 1fr; }
+  .presence-map{ min-height: 280px; }
+  .cards-presenca{ padding-left: clamp(12px, 4vw, 28px); }
+}
+/* Seção e Título */
+.presence{
+  padding: clamp(12px, 2.5vw, 32px) 0;
+}
+.presence-title{
+  font-family: "Anton", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: clamp(1.8rem, 4.8vw, 3rem);
+  line-height: .95;
+  letter-spacing: .01em;
+  color: #fff;
+  margin: 0 0 clamp(10px, 2vw, 18px);
+  padding-left: clamp(16px, 5vw, 64px);   /* alinha com os cards à esquerda */
+}
+
+/* Dois cards alinhados à esquerda, com mais espaço entre eles */
+.cards-presenca{
+  display: flex;
+  justify-content: flex-start;              /* esquerda */
+  align-items: flex-start;
+  gap: clamp(24px, 4vw, 56px);              /* ← MAIS ESPAÇO ENTRE ELES */
+  padding-left: clamp(16px, 5vw, 64px);     /* respiro da borda esquerda */
+  width: 100%;
+}
+
+
+
+/* Título centralizado */
+.presence-title{
+  text-align: center;
+  padding-left: 0;                /* remove o recuo à esquerda */
+  margin: 0 auto clamp(10px, 2vw, 18px);
+  font-family: "Anton", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: clamp(1.8rem, 4.8vw, 3rem);
+  line-height: .95;
+  letter-spacing: .01em;
+  color: #fff;
+}
+
+/* filete decorativo opcional */
+.presence-title::after{
+  content:"";
+  display:block;
+  width: clamp(80px, 6vw, 120px);
+  height: 4px;
+  margin: 12px auto 0;            /* centraliza o filete */
+  background:#2FA3FF;
+  border-radius: 999px;
+}
+
+/* cards continuam à esquerda */
+.cards-presenca{
+  justify-content: flex-start;
+  padding-left: clamp(16px, 5vw, 64px);
+}
+/* layout: cards à esquerda | mapa à direita, com mapa maior */
+.presence-row{
+  display: grid;
+  grid-template-columns: minmax(0, auto) 1fr;  /* cards tomam o que precisam, mapa pega o resto */
+  align-items: start;
+  gap: clamp(16px, 3vw, 40px);
+  padding: 0 clamp(16px, 5vw, 64px);
+}
+
+/* cards continuam à esquerda */
+.cards-presenca{
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: clamp(24px, 4vw, 56px);
+  padding-left: 0;
+}
+
+/* MAPA “PLANO”: sem borda, sem raio, sem sombra, sem fundo e bem maior */
+.presence-map{
+  align-self: start;
+  justify-self: end;                 /* encosta à direita da coluna */
+  margin-right: 0;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0;
+  width: auto;                        /* deixa a imagem mandar */
+}
+
+/* tamanho do mapa: ajuste aqui */
+.presence-map img{
+  display: block;
+  width: clamp(1040px, 52vw, 1100px);  /* ← AUMENTA o mapa; ajuste os valores se quiser */
+  height: auto;
+  object-fit: contain;                /* não corta a imagem */
+}
+
+/* mobile: empilha e centraliza o mapa embaixo */
+@media (max-width: 900px){
+  .presence-row{ grid-template-columns: 1fr; }
+  .presence-map{ justify-self: center; }
+  .presence-map img{ width: clamp(280px, 82vw, 980px); }
+}
+/* quanto quer descer os cards em relação ao mapa */
+:root{
+  --cards-shift: clamp(8px, 2.2vw, 28px);   /* ajuste livre */
+}
+
+/* desce apenas os cards; o mapa fica onde está */
+.presence-row{ align-items: start; }        /* garante alinhamento no topo da grid */
+.cards-presenca{
+  margin-top: var(--cards-shift);
+}
+
+/* se em mobile quiser zerar o deslocamento: */
+@media (max-width: 900px){
+  .cards-presenca{ margin-top: 0; }
+}
+/* fator de escala global dos cards (1 = tamanho atual) */
+:root{
+  --card-scale: 1.25;  /* 1.10, 1.2, 1.3… ajuste a gosto */
+}
+
+/* aumenta largura e altura mantendo a proporção 210x280 */
+.city{
+  width:  calc(210px * var(--card-scale));
+  height: calc(280px * var(--card-scale));
+}
+
+/* opcional: reposiciona as setas para acompanhar o novo tamanho */
+.city-card .prev{ left:  calc(-14px * var(--card-scale)); }
+.city-card .next{ right: calc(-14px * var(--card-scale)); }
+/* ====== Split Hero (divisão) ====== */
+:root{
+  --hero-height: clamp(380px, 68vh, 760px);
+  --panel-maxw: min(960px, 92vw);
+  --panel-pad: clamp(18px, 3vw, 36px);
+  --panel-radius: 18px;
+  --panel-bg: rgba(0,0,0,.70);
+  --panel-blur: 8px;
+  --title-size: clamp(1.6rem, 4.4vw, 3.2rem);
+  --text-size: clamp(.95rem, 1.4vw, 1.15rem);
+  --slide-duration: 6000ms;   /* tempo entre imagens */
+  --fade-time: 900ms;         /* duração do crossfade */
+}
+
+.split-hero{
+  position: relative;
+  height: var(--hero-height);
+  overflow: hidden;
+  background: #000; /* fallback */
+  isolation: isolate;
+}
+
+/* Fundo com slides */
+.split-hero .slides{
+  position: absolute; inset: 0;
+}
+.split-hero .slides::after{
+  /* véu para dar contraste ao card */
+  content:""; position:absolute; inset:0;
+  background: linear-gradient(180deg, rgba(0,0,0,.20), rgba(0,0,0,.55));
+  pointer-events:none;
+}
+.split-hero .slides img{
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--fade-time) ease;
+  will-change: opacity;
+}
+.split-hero .slides img.is-active{ opacity: 1; }
+
+/* Card à frente */
+.split-hero .panel{
+  position: relative;
+  z-index: 1;
+  margin: 0 auto;
+  top: 50%; transform: translateY(-50%);
+  max-width: var(--panel-maxw);
+  padding: var(--panel-pad);
+  background: var(--panel-bg);
+  -webkit-backdrop-filter: blur(var(--panel-blur));
+  backdrop-filter: blur(var(--panel-blur));
+  border-radius: var(--panel-radius);
+  box-shadow: 0 24px 60px rgba(0,0,0,.45);
+  text-align: center;
+  color: #fff;
+}
+.split-hero .panel h2{
+  margin: 0 0 .6rem 0;
+  font-family: "Anton", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  letter-spacing: .01em;
+  line-height: .95;
+  font-size: var(--title-size);
+}
+.split-hero .panel p{
+  margin: 0;
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: var(--text-size);
+  color: rgba(255,255,255,.92);
+}
+
+/* opcional: filete decorativo sob o título */
+.split-hero .panel h2::after{
+  content:""; display:block; margin:.7rem auto 0;
+  width: clamp(70px, 6vw, 120px); height: 4px;
+  background:#2FA3FF; border-radius:999px;
+}
+
+/* ====== TIMELINE ====== */
+/* ===== TIMELINE HORIZONTAL ===== */
+/* ===== HORIZONTAL: um quadro por tela ===== */
+/* ===== HORIZONTAL: 1 card por tela ===== */
+/* ===== TIMELINE VERTICAL (um por vez) ===== */
+/* ========== TIMELINE (VERTICAL 1-A-1) ========== */
+.timeline-wrap{ position:relative; padding:0 }
+
+/* Fluxo vertical */
+.hscroll{
+  display:block;
+  overflow:visible;
+  padding:6vh 4vw;
+}
+
+/* Cada step ocupa quase a tela */
+.step{
+  min-height:92vh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:16px;
+  max-width:1100px; margin:0 auto;
+  opacity:0; filter:blur(6px); transform:translateY(40px);
+  transition:opacity .8s ease, transform .8s ease, filter .8s ease;
+}
+.step.is-revealed{ opacity:1; filter:none; transform:none }
+
+/* Primeiro step sempre visível (fallback caso JS atrase) */
+#hscroll .step:first-of-type{
+  opacity:1 !important; filter:none !important; transform:none !important;
+}
+
+/* ========== CARD ========== */
+.tech-card{
+  --img:url('images/placeholder.jpg');           /* fallback (opcional) */
+  width:clamp(220px, 52vw, 520px);
+  aspect-ratio:16 / 9;
+  position:relative; overflow:hidden; cursor:pointer; border-radius:18px;
+  border:1px solid rgba(47,163,255,.25);
+  background:
+    radial-gradient(120% 80% at 20% 0%, rgba(47,163,255,.10), transparent 60%),
+    #0d0f14;
+  box-shadow:0 18px 40px rgba(0,0,0,.45), inset 0 0 0 1px rgba(47,163,255,.15);
+  transition:transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+}
+
+/* Imagem do <img> preenche o card */
+.tech-card > img{
+  position:absolute; inset:0;
+  width:100%; height:100%; object-fit:cover;
+  display:block !important;
+  z-index:0;
+}
+
+/* Suporte a --img (se não usar <img>) */
+.tech-card::before{
+  content:""; position:absolute; inset:0;
+  background-image:var(--img, none);
+  background-size:cover; background-position:center;
+  filter:saturate(1.05) contrast(1.05) brightness(.96);
+  transition:transform .6s ease, filter .4s ease;
+  z-index:0;         /* fica atrás do overlay interno do card */
+}
+
+/* Título/textos abaixo do card */
+.step-title{
+  margin:18px 0 0;
+  font-size:clamp(22px, 4vw, 40px);
+  font-weight:800; text-align:center;
+}
+.step-text{
+  margin:6px 0 0; color:rgba(255,255,255,.88);
+  max-width:70ch; text-align:center;
+}
+
+/* ========== ZOOM (fantasma) ========== */
+.zoom-ghost{
+  position:fixed; left:0; top:0; width:0; height:0; z-index:120;
+  background-size:cover; background-position:center;
+  border-radius:16px; box-shadow:0 24px 60px rgba(0,0,0,.45);
+  will-change:transform,opacity;
+  transition:transform .6s cubic-bezier(.2,.8,.2,1), opacity .25s ease;
+  pointer-events:none;
+}
+
+/* ========== OVERLAY ========== */
+#zoom-overlay{
+  position:fixed; inset:0; z-index:130;
+  display:grid; place-items:center;
+  padding:clamp(14px,3vw,28px);
+  background:rgba(0,0,0,.55); backdrop-filter:blur(8px);
+  opacity:0; pointer-events:none; transition:opacity .22s ease;
+}
+#zoom-overlay.open{ opacity:1; pointer-events:auto }
+
+.zoom-card{
+  width:min(1100px,92vw);
+  color:#fff; background:rgba(16,18,24,.88);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:16px; padding:clamp(16px,3vw,28px);
+  box-shadow:0 24px 60px rgba(0,0,0,.45);
+  transform:translateY(16px); opacity:0;
+  transition:opacity .22s ease .1s, transform .22s ease .1s;
+}
+#zoom-overlay.open .zoom-card{ transform:none; opacity:1 }
+
+.zoom-title{ margin:0 0 10px; text-align:center; font-size:clamp(22px,3.6vw,34px); font-weight:800 }
+.zoom-desc { margin:10px auto 0; text-align:center; color:rgba(255,255,255,.92); font-size:clamp(14px,2.3vw,18px); max-width:70ch }
+.zoom-media{
+  margin:10px auto 8px; width:100%; max-height:68vh;
+  border-radius:14px; overflow:hidden;
+  border:1px solid rgba(47,163,255,.3);
+  box-shadow:inset 0 0 0 1px rgba(47,163,255,.15);
+}
+.zoom-media > *{ display:block; width:100%; height:100%; object-fit:cover }
+.close-zoom{
+  position:absolute; top:10px; right:10px; width:38px; height:38px;
+  border-radius:999px; border:1px solid rgba(255,255,255,.2);
+  background:rgba(255,255,255,.08); color:#fff;
+  display:inline-flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:filter .15s ease, transform .15s ease;
+}
+.close-zoom:hover{ filter:brightness(1.1) }
+.close-zoom:active{ transform:scale(.96) }
+.close-zoom:focus-visible{ outline:none; box-shadow:0 0 0 3px rgba(47,163,255,.65) }
+
+/* ========== RAIL VERTICAL (à direita dos cards) ========== */
+:root{
+  --card-w: clamp(220px, 52vw, 520px);     /* MESMO valor do .tech-card */
+  --gap-rail: 64px;                         /* empurra a linha p/ direita */
+  --rail-base: rgba(255,255,255,.12);
+  --rail-color: #2FA3FF;                    /* mude p/ #fff se quiser branca */
+}
+
+.v-rail{
+  position:fixed; top:0;
+  left:calc(50% + (var(--card-w)/2) + var(--gap-rail));
+  transform:translateX(-50%);
+  height:100vh; width:3px;
+  background:var(--rail-base);
+  z-index:140;               /* acima dos cards e do rail antigo */
+  pointer-events:none;
+  opacity:0; transition:opacity .2s ease;
+}
+.v-rail.is-active{ opacity:1 }
+
+.v-rail .v-progress{
+  position:absolute; top:0; left:0; width:100%; height:0;
+  background:var(--rail-color);
+  box-shadow:0 0 14px color-mix(in srgb, var(--rail-color) 60%, transparent);
+}
+
+/* ========== REMOÇÕES / AJUSTES ========== */
+/* Desativa a antiga rail horizontal */
+.rail, .rail-progress{ display:none !important }
+/* ---- Hover/tilt suave no card ---- */
+.tech-card{
+  will-change: transform, box-shadow, filter;
+  transform-style: preserve-3d;
+  transition:
+    transform .28s ease,
+    box-shadow .28s ease,
+    border-color .28s ease,
+    filter .28s ease;
+}
+
+/* “levantar” no hover (fallback para quem não tem JS/tilt) */
+@media (hover:hover){
+  .tech-card:hover{
+    transform: translateY(-6px) scale(1.02);
+    border-color: rgba(47,163,255,.5);
+    box-shadow:
+      0 22px 48px rgba(0,0,0,.45),
+      inset 0 0 0 1px rgba(47,163,255,.18);
+    filter: saturate(1.03);
+  }
+  .tech-card:hover > img{ transform: scale(1.04); transition: transform .35s ease }
+}
+
+/* Luz que segue o mouse (controlada via --mx / --my) */
+.tech-card::after{
+  /* mantém seu gradiente + adiciona a luz */
+  background:
+    radial-gradient(200px 200px at var(--mx,50%) var(--my,50%),
+                    rgba(255,255,255,.10), transparent 45%),
+    linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.55) 55%, rgba(0,0,0,.70));
+  mix-blend-mode: normal;
+  opacity: .85;
+  transition: opacity .25s ease;
+}
+.tech-card:hover::after{ opacity: .78 }
+
+@media (prefers-reduced-motion: reduce){
+  .tech-card, .tech-card > img{ transition: none !important }
+}
+
+
+/* Evita regra solta que mexia em flex-basis (não usamos horizontal aqui) */
+@media (max-width:900px){
+  /* nada específico pros steps aqui; mantém o vertical */
+}
+
+/* === LAYOUT: cards à esquerda | mapa (vídeo) à direita === */
+.presence-row{
+  display: grid;
+  /* cards ocupam o espaço que precisarem; mapa fica restrito à coluna da direita */
+  grid-template-columns: minmax(0, 520px) min(52vw, 1100px);
+  align-items: start;
+  gap: clamp(16px, 3vw, 40px);
+  padding: 0 clamp(16px, 5vw, 64px);
+}
+
+/* MAPA/VÍDEO sempre na DIREITA e do tamanho da coluna */
+.presence-map{
+  position: relative;
+  justify-self: end;           /* encosta à direita da grid */
+  align-self: start;
+  width: 100%;                 /* ocupa a coluna inteira (a da direita) */
+  max-width: 1100px;           /* limite duro para telas largas */
+  aspect-ratio: 16 / 10;       /* ajuste a proporção conforme seu vídeo */
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-radius: 16px;         /* se quiser cantos arredondados */
+  box-shadow: none;
+  isolation: isolate;
+  pointer-events: none;        /* NÃO intercepta cliques (setas do carrossel) */
+  z-index: 0;
+}
+
+/* VÍDEO como background do bloco */
+.presence-map .presence-video{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;           /* use 'contain' se não quiser cortes */
+  object-position: center;
+  display: block;
+  z-index: -1;
+}
+
+/* Camada de escurecimento (opcional) */
+.presence-map .presence-dim{
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 10, 30, .35);
+  z-index: 0;
+}
+
+/* CARDS continuam à esquerda e não “entram” sob o vídeo */
+.cards-presenca{
+  margin-top: var(--cards-shift, 0);
+  padding-left: 0;
+  z-index: 1;                  /* garante que fiquem sobre o fundo, sem sobreposição do vídeo */
+}
+
+/* MOBILE: empilha e centraliza o mapa abaixo dos cards */
+@media (max-width: 900px){
+  .presence-row{ grid-template-columns: 1fr; }
+  .presence-map{
+    justify-self: center;
+    width: min(82vw, 980px);
+    max-width: 980px;
+    aspect-ratio: 16 / 10;
+  }
+}
