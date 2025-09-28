@@ -33,6 +33,8 @@
   <script src="js/cards.js" defer></script>
 <script src="js/split-hero.js" defer></script>
 <script src="js/./featuresection.js" defer></script>
+<script src="js/./featuresection.js" defer></script>
+<script src="js/./presence.js" defer></script>
 
 
 </head>
@@ -235,58 +237,67 @@
 </div>
 </div>
   </div>
-<section class="presence">
-  <h2 class="presence-title">Presença LATAM e América do Norte</h2>
+<section class="geo-hero" aria-labelledby="geo-title">
+  <h2 id="geo-title" class="geo-title">Presença nas Américas</h2>
 
-  <div class="presence-row">
-    <!-- ESQUERDA: dois cards -->
-    <div class="cards-presenca">
-      <!-- CARD: Nacional (Brasil) -->
-      <div class="city-card" id="card-br">
-        <button class="arrow prev" aria-label="Anterior">‹</button>
-        <div class="city">
-          <img class="photo" src="images/cities/sp.jpg" alt="São Paulo">
-          <div class="label">
-            <span class="tag">Brasil</span>
-            <h3 class="name">São Paulo</h3>
-          </div>
-        </div>
-        <button class="arrow next" aria-label="Próximo">›</button>
-      </div>
+  <div class="geo-wrap">
+    <!-- MAPA como background -->
+    <div class="geo-map"> <img src="images\Image_fx (60).jpg" alt="mapa">
+      <!-- Overlay de pinos -->
+     <!-- ... -->
+  <div class="pins">
+    <button class="pin pin--dc"  style="--x:45.3%; --y:67.5%" data-id="sp"   data-city="São Paulo"></button>
+    <button class="pin pin--yard" style="--x:48.5%; --y:65.9%" data-id="rj"   data-city="Rio de Janeiro"></button>
+    <button class="pin pin--truck"style="--x:48.7%; --y:61.0%" data-id="ba"   data-city="Bahia"></button>
+    <button class="pin pin--dc"  style="--x:44.9%; --y:59.5%" data-id="bsb"  data-city="Brasilia"></button>
+    <button class="pin pin--yard" style="--x:38.0%; --y:50.7%" data-id="bog"  data-city="Bogotá"></button>
+    <button class="pin pin--truck"style="--x:35.1%; --y:36.7%" data-id="mia"  data-city="Miami"></button>
+    <button class="pin pin--truck"style="--x:30.7%; --y:42.9%" data-id="mex"  data-city="México"></button>
+    <button class="pin pin--truck"style="--x:41.9%; --y:75.4%" data-id="bue"  data-city="Buenos Aires"></button>
+  </div>
 
-      <!-- CARD: Internacional -->
-      <div class="city-card" id="card-int">
-        <button class="arrow prev" aria-label="Anterior">‹</button>
-        <div class="city">
-          <img class="photo" src="images/cities/miami.jpg" alt="Miami (EUA)">
-          <div class="label">
-            <span class="tag">Internacional</span>
-            <h3 class="name">Miami (EUA)</h3>
-          </div>
-        </div>
-        <button class="arrow next" aria-label="Próximo">›</button>
-      </div>
+  <!-- SVG vazio: os arcos serão inseridos por JS -->
+  <svg class="geo-arcs" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true"></svg>
+
+
+      <!-- Tooltip simples (preenchido via CSS attr) -->
+      <div class="tooltip" role="status" aria-live="polite"></div>
     </div>
 
-    <!-- DIREITA: mapa menor -->
-   <!-- DIREITA: mapa com vídeo de fundo -->
-<aside class="presence-map" aria-label="Mapa de atuação">
-  <video class="presence-video"
-         autoplay
-         muted
-         loop
-         playsinline
-         preload="auto"
-         poster="images/video/map.mp4">
-    <source src="images/video/map.mp4" type="video/mp4" />
-    Seu navegador não suporta vídeo HTML5.
-  </video>
+    <!-- Coluna lateral: legenda + CTA -->
+    <aside class="geo-panel" aria-label="Legenda e ações">
+      <ul class="legend">
+        <li><span class="dot dot--truck"></span> Truckload Services</li>
+        <li><span class="dot dot--yard"></span> Container Yards</li>
+        <li><span class="dot dot--dc"></span> Distribution Centers</li>
+      </ul>
 
-  <!-- escurecimento opcional, ajuste a opacidade no CSS -->
-  <div class="presence-dim" aria-hidden="true"></div>
-</aside>
+      <div class="zones">
+        <p>Regiões de atendimento (exemplo)</p>
+        <div class="swatches">
+          <span><i class="sw-1"></i> 1 dia</span>
+          <span><i class="sw-2"></i> 2 dias</span>
+          <span><i class="sw-3"></i> 3 dias</span>
+        </div>
+      </div>
 
+      <h3 class="panel-title">Cobertura logística nas Américas</h3>
+      <a class="cta" href="#contato">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 1 0 18 9 9 0 0 1 0-18Zm1.06 5.44 3.5 3.5a1.5 1.5 0 0 1 0 2.12l-3.5 3.5a1 1 0 1 1-1.42-1.42l2.44-2.44H7a1 1 0 1 1 0-2h7.08l-2.44-2.44a1 1 0 0 1 1.42-1.42Z"/></svg>
+        Explorar localidades
+      </a>
+    </aside>
+  </div>
 </section>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 <!-- DIVISÃO – Alcance Global -->
 <section id="alcance" class="split-hero">
   <!-- Slides de fundo (troque as imagens pelos seus arquivos) -->
@@ -311,9 +322,18 @@
 </section><br>
 <br>
 <br>
+<br>
+<br>
+<br>
+<br>
+
+
   <section class="timeline-wrap" aria-labelledby="tl-title">
-  <h2 id="tl-title" class="sr-only">Nossos Serviços</h2>
-<!-- Linha vertical fixa (progresso acompanha a rolagem) -->
+   <div class="tl-head">
+    <h2 id="tl-title">Nossos Serviços</h2>
+    <p class="tl-subtitle">Atendimento em Português, Inglês e Espanhol (incluindo relatórios sob demanda)</p>
+  </div>
+
 <div class="v-rail " aria-hidden="true">
   <div class="v-progress" id="v-progress"></div>
 </div>
@@ -346,8 +366,8 @@
         <span class="tag">Validação</span>
         <span class="title">Estudos de Qualificação</span>
       </button>
-      <h3 class="step-title">Nosso método é simples</h3>
-      <p class="step-text">Planejamento, execução e documentação com rastreabilidade total.</p>
+      <h3 class="step-title">Estudos de Qualificação</h3>
+      <p class="step-text">Qualificação térmica e validação de processos conforme normas nacionais e internacionais.</p>
     </article>
 
     <!-- 03 -->
@@ -360,8 +380,8 @@
         <span class="tag">Supply Chain</span>
         <span class="title">Comércio Exterior</span>
       </button>
-      <h3 class="step-title">Supply que performa</h3>
-      <p class="step-text">Eficiência ponta a ponta, do planejamento ao desembaraço.</p>
+      <h3 class="step-title">Supply Chain e Comércio Exterior</h3>
+      <p class="step-text">Desenvolvimento e otimização de cadeias logísticas nacionais e internacionais.</p>
     </article>
 
     <!-- 04 (com vídeo) -->
@@ -375,8 +395,8 @@
         <span class="tag">Logística</span>
         <span class="title">Transportes & Armazenagem</span>
       </button>
-      <h3 class="step-title">Mover com precisão</h3>
-      <p class="step-text">Rotas otimizadas, controle de risco e visibilidade operacional.</p>
+      <h3 class="step-title">Logística, Transportes e Armazenagem</h3>
+      <p class="step-text">Assessoria completa em operações logísticas, transporte e armazenamento</p>
     </article>
 
     <!-- 05 -->
@@ -403,8 +423,8 @@
         <span class="tag">Saúde</span>
         <span class="title">Distribuidoras Médicas</span>
       </button>
-      <h3 class="step-title">Saúde em foco</h3>
-      <p class="step-text">Especialização em cadeia fria, ANVISA e boas práticas.</p>
+      <h3 class="step-title">Assessoria para Distribuidoras Médicas</h3>
+      <p class="step-text">Consultoria especializada para distribuidoras de dispositivos médicos e produtos para saúde.</p>
     </article>
 
     <!-- 07 -->
@@ -417,8 +437,10 @@
         <span class="tag">Treinamento</span>
         <span class="title">Qualificação</span>
       </button>
-      <h3 class="step-title">Time preparado</h3>
-      <p class="step-text">Capacitação prática, aplicada ao dia a dia da operação.</p>
+      <h3 class="step-title">Treinamento e Qualificação</h3>
+      <p class="step-text">Programas de capacitação e desenvolvimento de equipes técnicas e operacionais.
+
+</p>
     </article>
 
     <!-- 08 -->
@@ -431,8 +453,8 @@
         <span class="tag">Operações</span>
         <span class="title">Armazenagem & Distribuição</span>
       </button>
-      <h3 class="step-title">Estocar com inteligência</h3>
-      <p class="step-text">Layout, WMS e KPIs para máxima acurácia e giro.</p>
+      <h3 class="step-title">Armazenagem e Distribuição</h3>
+      <p class="step-text">Soluções especializadas para armazenagem e distribuição de insumos farmacêuticos e alimentos.</p>
     </article>
 
     <!-- 09 -->
@@ -445,8 +467,8 @@
         <span class="tag">Compliance</span>
         <span class="title">Jurídico Corporativo</span>
       </button>
-      <h3 class="step-title">Risco sob controle</h3>
-      <p class="step-text">Governança, conformidade e prevenção de passivos.</p>
+      <h3 class="step-title">Jurídico Corporativo</h3>
+      <p class="step-text">Softlanding com parceria em escritórios de atendimento presencial, projetos de compliance e risk mitigation para questões trabalhistas</p>
     </article>
 
     <!-- 10 -->
@@ -459,8 +481,8 @@
         <span class="tag">Trade</span>
         <span class="title">Consultoria de Comex</span>
       </button>
-      <h3 class="step-title">Trade sem atrito</h3>
-      <p class="step-text">Estratégia fiscal e aduaneira para competir globalmente.</p>
+      <h3 class="step-title">Consultoria de Comércio Exterior</h3>
+      <p class="step-text">Regimes especiais, otimização de custos logísticos e soluções para comércio internacional.</p>
     </article>
   </div>
 </section>
@@ -473,11 +495,38 @@
     <div class="zoom-media"></div>
     <p class="zoom-desc"></p>
   </div>
+ 
 </div>
+</div>
+  </div>
+ <section class="culture-hero one" aria-labelledby="culture-title">
+  <div class="hero-media">
+    <img src="images/marcelodafne.png" alt="Nosso time">
+  </div>
+
+  <div class="heroi-shade" aria-hidden="true"></div>
+
+  <div class="hero-content">
+    <h2 id="culture-title" class="hero-title">
+      A TEAM CULTURE<br>BUILT TO <span class="accent">WIN</span>
+    </h2>
+    <a href="#carreiras" class="hero-cta">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 1 0 18 9 9 0 0 1 0-18Zm1.06 5.44 3.5 3.5a1.5 1.5 0 0 1 0 2.12l-3.5 3.5a1 1 0 1 1-1.42-1.42l2.44-2.44H7a1 1 0 1 1 0-2h7.08l-2.44-2.44a1 1 0 0 1 1.42-1.42Z"/></svg>
+      Ready to join our team?
+    </a>
+  </div>
+</section>
+
+
+ 
 
 
 
-    </div>
+
+
+
+
+</section>
   </body>
 </html>
 

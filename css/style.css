@@ -1157,36 +1157,43 @@ body{
 .close-zoom:active{ transform:scale(.96) }
 .close-zoom:focus-visible{ outline:none; box-shadow:0 0 0 3px rgba(47,163,255,.65) }
 
-/* ========== RAIL VERTICAL (à direita dos cards) ========== */
 :root{
-  --card-w: clamp(220px, 52vw, 520px);     /* MESMO valor do .tech-card */
-  --gap-rail: 64px;                         /* empurra a linha p/ direita */
-  --rail-base: rgba(255,255,255,.12);
-  --rail-color: #2FA3FF;                    /* mude p/ #fff se quiser branca */
+  --card-w: clamp(220px, 52vw, 520px);
+  --gap-rail: 150px;
+
+  /* linha bem discreta */
+  --rail-base: rgba(255,255,255,.06);     /* trilho apagado */
+  --rail-progress: rgba(2, 129, 255, 0.34); /* progresso branco suave */
+  --rail-progress-glow: rgba(255,255,255,.25);
+
+  /* cor da BOLINHA ativa */
+  --dot-color: #2FA3FF;                   /* azul só no ponto */
 }
 
+/* Linha vertical (fina e discreta) */
 .v-rail{
-  position:fixed; top:0;
-  left:calc(50% + (var(--card-w)/2) + var(--gap-rail));
-  transform:translateX(-50%);
-  height:100vh; width:3px;
-  background:var(--rail-base);
-  z-index:140;               /* acima dos cards e do rail antigo */
-  pointer-events:none;
-  opacity:0; transition:opacity .2s ease;
+  position: fixed; top: 0;
+  left: calc(50% + (var(--card-w)/2) + var(--gap-rail));
+  transform: translateX(-50%);
+  height: 100vh; width: 2px;
+  background: var(--rail-base);
+  z-index: 5; pointer-events: none;
+  opacity: 1; transition: background .3s ease;
+  width: 6px;
 }
-.v-rail.is-active{ opacity:1 }
 
+/* Progresso agora branco/cinza, não azul */
 .v-rail .v-progress{
-  position:absolute; top:0; left:0; width:100%; height:0;
-  background:var(--rail-color);
-  box-shadow:0 0 14px color-mix(in srgb, var(--rail-color) 60%, transparent);
+  position: absolute; top:0; left:0; width:100%; height:0;
+  background: var(--rail-progress);
+  box-shadow: 0 0 10px var(--rail-progress-glow);
+  transition: height .3s ease;
 }
 
-/* ========== REMOÇÕES / AJUSTES ========== */
-/* Desativa a antiga rail horizontal */
-.rail, .rail-progress{ display:none !important }
-/* ---- Hover/tilt suave no card ---- */
+/* Bolinha discreta por padrão */
+
+
+
 .tech-card{
   will-change: transform, box-shadow, filter;
   transform-style: preserve-3d;
@@ -1298,3 +1305,454 @@ body{
     aspect-ratio: 16 / 10;
   }
 }
+:root{
+  --bg:#0B0E12;
+  --panel:#0F1320;
+  --text:#EAF2FF;
+  --muted:#BFD3EB;
+  --blue:#2FA3FF;
+  --blue2:#7CC6FF;
+  --cyan:#AEE3FF;
+}
+
+.geo-hero{ background: var(--bg); padding: clamp(16px, 3vw, 28px) 0 64px; }
+.geo-title{
+  text-align:center; color:#fff; margin:0 0 16px;
+  font-family:"Anton", system-ui; font-size: clamp(28px, 5vw, 46px); line-height:.95;
+}
+.geo-title::after{
+  content:""; display:block; width: clamp(80px,6vw,120px); height:4px; margin:10px auto 0;
+  background: var(--blue); border-radius:999px;
+}
+
+.geo-wrap{
+  display:grid;
+  grid-template-columns: 1fr min(420px, 36vw);
+  gap: clamp(16px, 3vw, 40px);
+  align-items: start;
+  padding: 0 clamp(16px, 4vw, 64px);
+}
+
+.geo-map{
+  position: relative;
+  aspect-ratio: 16/9;
+  background:
+    radial-gradient(120% 80% at 18% 6%, rgba(47,163,255,.07), transparent 60%),
+    var(--panel);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius: 16px; overflow: hidden; isolation:isolate;
+}
+.geo-map::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image: var(--map);
+  background-size: cover; background-position: left center;
+  opacity:.42; filter: saturate(1.1) contrast(1.05);
+  z-index:0;
+}
+
+/* Pinos */
+.pins{ position:absolute; inset:0; z-index:2 }
+.pin{
+  --x:50%; --y:50%;
+  position:absolute; left:var(--x); top:var(--y);
+  transform: translate(-50%, -50%);
+  width:10px; height:10px; border-radius:50%;
+  background: var(--blue); box-shadow:0 0 14px rgba(47,163,255,.9);
+  border:1px solid rgba(255,255,255,.25);
+  cursor: pointer;
+  animation: pulse 2.8s ease-in-out infinite;
+}
+.pin--yard{ background: var(--blue2); box-shadow:0 0 14px rgba(124,198,255,.9); animation-delay:.4s }
+.pin--dc  { background: var(--cyan);  box-shadow:0 0 14px rgba(174,227,255,.9); animation-delay:.8s }
+
+@keyframes pulse{
+  0%,100%{ transform:translate(-50%,-50%) scale(1); opacity:.95 }
+  50%{ transform:translate(-50%,-50%) scale(1.35); opacity:1 }
+}
+
+/* Arcos (conexões) */
+.geo-arcs{
+  position:absolute; inset:0; z-index:1;
+}
+.arc{
+  fill:none;
+  stroke: var(--blue);
+  stroke-width:1.6;
+  stroke-linecap: round;
+  opacity:.65;
+  stroke-dasharray: 4 6;
+  animation: dash 10s linear infinite;
+}
+@keyframes dash{
+  to { stroke-dashoffset: -200; }
+}
+
+/* Tooltip (sem JS: usa :hover com data-attrs) */
+.tooltip{
+  position:absolute; inset:auto 0 8px 8px; z-index:3;
+  pointer-events:none; color:#cfe8ff; font-size:12px;
+}
+.pin:hover ~ .tooltip::before{
+  content: attr(data-city);
+}
+.pin:hover ~ .tooltip::after{
+  content: " • " attr(data-type);
+}
+
+/* Painel lateral */
+.geo-panel{
+  background: rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius: 16px;
+  padding: clamp(14px, 2.5vw, 20px);
+  color: var(--text);
+  backdrop-filter: blur(8px);
+}
+
+.legend{ list-style:none; margin:0 0 12px; padding:0; display:grid; gap:10px }
+.legend li{
+  display:flex; align-items:center; gap:10px;
+  background: rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:999px; padding:8px 12px; width:max-content;
+  font-weight:600; font-size:13px;
+}
+.dot{ width:14px; height:14px; border-radius:50% }
+.dot--truck{ background: var(--blue) }
+.dot--yard { background: var(--blue2) }
+.dot--dc   { background: var(--cyan) }
+
+.zones p{
+  margin:8px 0 6px; color: var(--muted);
+  font:600 11px/1 system-ui; letter-spacing:.06em; text-transform:uppercase;
+}
+.swatches{ display:flex; gap:12px 18px; flex-wrap:wrap }
+.swatches span{ display:inline-flex; align-items:center; gap:8px; font-size:13px; color:#dff1ff }
+.swatches i{ width:22px; height:14px; border-radius:3px; display:inline-block }
+.sw-1{ background: rgba(47,163,255,.45) }
+.sw-2{ background: rgba(47,163,255,.28) }
+.sw-3{ background: rgba(47,163,255,.15) }
+
+.panel-title{
+  margin:12px 0 10px; font-family:"Anton", system-ui; font-size: clamp(18px, 2.6vw, 26px);
+}
+.cta{
+  display:inline-flex; align-items:center; gap:10px;
+  padding:10px 14px; border-radius:999px; color:#001423;
+  background:#18B2FF; border:1px solid rgba(24,178,255,.6);
+  font-weight:800; letter-spacing:.02em;
+  box-shadow:0 10px 26px rgba(24,178,255,.25);
+  transition: transform .18s ease, filter .18s ease;
+}
+.cta:hover{ transform: translateY(-2px); filter: brightness(1.05) }
+.cta svg{ width:20px; height:20px; fill: currentColor }
+
+@media (max-width: 980px){
+  .geo-wrap{ grid-template-columns: 1fr; }
+  .geo-panel{ order: -1; margin: 0 clamp(16px,4vw,64px); }
+}
+#tl-title{
+  position: relative;
+  display: inline-block;              /* mantém a barrinha alinhada ao texto */
+  color: #fff;
+  font-weight: 800;                   /* bem encorpado */
+  line-height: 1.1;
+  letter-spacing: .2px;
+  font-size: clamp(28px, 5vw, 64px);  /* responsivo */
+  text-shadow: 0 2px 12px rgba(0,0,0,.35);
+  font-family:  "Anton", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  text-align: center;                 /* garante alinhamento de conteúdo */
+  margin: 0 auto;     
+   text-align: center;
+  padding-left: 0;                /* remove o recuo à esquerda */
+  margin: 0 auto clamp(10px, 2vw, 18px);
+  font-family: "Anton", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: clamp(1.8rem, 4.8vw, 3rem);
+  line-height: .95;
+  letter-spacing: .01em;
+  color: #fff;
+  
+}
+
+/* sublinhado curto centralizado */
+#tl-title::after{
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -10px;                      /* distância do texto */
+  width: 110px;                       /* tamanho da barra */
+  height: 4px;                        /* espessura da barra */
+  background: linear-gradient(90deg,#3aa6ff,#0b78ff);
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(11,120,255,.35);
+}
+/* 1) Impede colapso no container dos cards */
+.timeline-wrap .hscroll{
+  margin-top: 0;
+  padding-top: 1px;     /* 1px já quebra o colapso */
+  display: flow-root;   /* cria BFC e evita colapso/misturas */
+  /* alternativa: overflow: auto; */
+}
+
+/* 2) Zera a margem do primeiro card (garantia extra) */
+.timeline-wrap .step:first-child{
+  margin-top: 0;
+}
+
+/* 3) Se o primeiro elemento dentro do .step (ex.: a imagem/botão) tiver margin-top, zere */
+.timeline-wrap .step > *:first-child{
+  margin-top: 0;
+}
+
+/* 4) Ajuste fino da distância entre a imagem e o título do card */
+.timeline-wrap .step-title{
+  margin-top: 12px;     /* controle do espaço DENTRO do card */
+}
+.geo-map{ position:relative }
+.geo-map img{ display:block; width:100%; height:auto }
+.geo-arcs{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none }
+
+.arc{
+  fill:none; stroke:#27b0ff; stroke-width:2.2;
+  stroke-linecap:round; opacity:.9;
+  filter: drop-shadow(0 0 2px #27b0ff);
+  stroke-dasharray: 220 220; stroke-dashoffset:220;
+  animation: draw .9s ease forwards;
+}
+@keyframes draw{ to{ stroke-dashoffset:0 } }
+.timeline-wrap{ text-align:center; }
+
+/* bloco título + subtítulo fica como “uma peça só” */
+.tl-head{
+  display:inline-block;
+  margin: 0 auto 8px;            /* distância até os cards */
+}
+
+/* TÍTULO */
+#tl-title{
+  position: relative;
+  display: inline-block;
+  margin: 0 0 6px;               /* distância até o subtítulo */
+  line-height: .95;
+  letter-spacing: .01em;
+  color:#fff;
+  font-family: "Anton", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-weight: 800;
+  font-size: clamp(28px, 5vw, 64px);
+  text-shadow: 0 2px 12px rgba(0,0,0,.35);
+}
+
+/* barrinha curta centralizada */
+#tl-title::after{
+  content:"";
+  position:absolute;
+  left:50%; transform:translateX(-50%);
+  bottom: -6px;                  /* coladinha no texto */
+  width:110px; height:4px;
+  background: linear-gradient(90deg,#3aa6ff,#0b78ff);
+  border-radius:999px;
+  box-shadow:0 2px 8px rgba(11,120,255,.35);
+}
+
+/* SUBTÍTULO */
+.tl-subtitle{
+  margin: 14px 0 0;              /* espaço entre título e subtítulo */
+  color: rgba(255,255,255,.80);
+  font: 500 clamp(14px,2.2vw,18px)/1.4 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+/* container dos cards encostando no cabeçalho */
+.timeline-wrap .hscroll{
+  margin-top: 8px;               /* ajuste fino até “colar” */
+  padding-top: 1px;              /* quebra colapso de margem */
+  display: flow-root;            /* previne colapso de margem */
+}
+
+/* garantias extras contra gap inesperado */
+.timeline-wrap .step:first-child{ margin-top:0; }
+.timeline-wrap .step > *:first-child{ margin-top:0; }
+
+/* título do card com respiro controlado */
+.timeline-wrap .step-title{ margin-top:12px; 
+/* team
+:root{
+  --accent: #ffd034;        /* amarelo da palavra WIN */
+  --fg: #fff;
+}
+
+.culture-hero{
+  position: relative;
+  min-height: clamp(420px, 70vh, 720px);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+/* 3 imagens lado a lado ocupando 100% */
+.culture-hero .hero-media{
+  position:absolute; inset:0;
+  display:grid; grid-template-columns: 1fr 1fr 1fr;
+}
+.culture-hero .hero-media img{
+  width:100%; height:100%; object-fit:cover;
+  filter: saturate(.9) contrast(.95);
+}
+
+/* sombra/escurecido + leve blur */
+.culture-hero .heroi-shade{
+  position:absolute; inset:0;
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,.55), rgba(0,0,0,.55));
+  backdrop-filter: blur(1px);
+}
+
+/* conteúdo central */
+.culture-hero .hero-content{
+  position:relative;
+  text-align:left;
+  width:min(1100px, 92vw);
+  margin-inline:auto;
+}
+
+.hero-title{
+  margin:0 0 18px;
+  color:var(--fg);
+  font-family:"Anton", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-weight:800;
+  line-height:.94;
+  letter-spacing:.01em;
+  font-size: clamp(32px, 7vw, 84px);
+  text-shadow:0 2px 16px rgba(0,0,0,.45);
+}
+.hero-title .accent{
+  color: var(--accent);
+}
+
+/* CTA com ícone circular */
+.hero-cta{
+  display:inline-flex; align-items:center; gap:10px;
+  color:#dff1ff; text-decoration:none; font-weight:600;
+  font-size: clamp(14px, 1.6vw, 18px);
+  padding:10px 14px; border-radius:999px;
+  background: rgba(0,0,0,.35);
+  box-shadow: 0 4px 24px rgba(0,0,0,.25);
+  transition: transform .2s ease, background .2s ease;
+}
+.hero-cta svg{ width:22px; height:22px; fill:#7fd0ff; }
+.hero-cta:hover{ transform: translateY(-2px); background: rgba(0,0,0,.45); }
+
+/* responsivo: empurra título um pouco pra esquerda em telas largas */
+@media (min-width: 900px){
+  .culture-hero .hero-content{ padding-left: 6vw; }
+}
+:root{ --accent:#2FA3FF; --fg:#fff; }
+
+.culture-hero.one{
+  position:relative;
+  min-height: clamp(460px, 72vh, 820px); /* ocupa bem a tela */
+  width:100%;
+  overflow:hidden;
+  display:grid; place-items:center;
+  isolation:isolate;                /* evita vazamentos de z-index */
+  border-radius:16px;               /* remova se quiser full-full */
+}
+
+/* uma única imagem, cobrindo tudo */
+.culture-hero.one .hero-media{
+  position:absolute; inset:0;
+}
+.culture-hero.one .hero-media img{
+  width:100%; height:100%;
+  object-fit:cover;                 /* cobre 100% da seção */
+  object-position:center 40%;       /* ajuste o foco (top/center/bottom) */
+  display:block;
+}
+
+/* escurecido por cima pra dar contraste no texto */
+.culture-hero.one .hero-shade{
+  position:absolute; inset:0;
+  background: linear-gradient(0deg, rgba(0,0,0,.55), rgba(0,0,0,.55));
+  /* opcional: vinheta suave
+  box-shadow: inset 0 0 120px rgba(0,0,0,.35);
+  */
+}
+
+/* conteúdo */
+.culture-hero.one .hero-content{
+  position:relative; z-index:1;
+  width:min(1100px, 92vw);
+  margin-inline:auto;
+  padding-inline: clamp(16px, 4vw, 48px);
+  text-align:left;
+}
+
+.hero-title{
+  margin:0 0 18px;
+  color:var(--fg);
+  font-family:"Anton", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-weight:800;
+  line-height:.94;
+  letter-spacing:.01em;
+  font-size: clamp(36px, 7vw, 96px);
+  text-shadow:0 2px 16px rgba(0,0,0,.45);
+}
+.hero-title .accent{ color:var(--accent); }
+
+/* CTA */
+.hero-cta{
+  display:inline-flex; align-items:center; gap:10px;
+  color:#dff1ff; text-decoration:none; font-weight:600;
+  font-size: clamp(14px, 1.6vw, 18px);
+  padding:10px 14px; border-radius:999px;
+  background: rgba(0,0,0,.35);
+  box-shadow: 0 4px 24px rgba(0,0,0,.25);
+  transition: transform .2s ease, background .2s ease;
+}
+.hero-cta svg{ width:22px; height:22px; fill:#7fd0ff; }
+.hero-cta:hover{ transform: translateY(-2px); background: rgba(0,0,0,.45); }
+
+/* alinhamento do bloco de texto (empurra um pouco p/ a esquerda no desktop) */
+@media (min-width: 1000px){
+  .culture-hero.one .hero-content{ padding-left: 6vw; }
+}
+/* 1) limite a v-rail ao próprio bloco da timeline */
+.timeline-wrap{ position: relative; overflow: hidden; }  /* corta qualquer sobra */
+
+.timeline-wrap .v-rail{
+  position: absolute;   /* NADA de fixed aqui */
+  top: 0;
+  bottom: 0;            /* termina exatamente no fim da seção */
+  left: 50%;            /* ajuste conforme seu layout */
+  transform: translateX(-50%);
+  width: 2px;
+  background: transparent;  /* se a linha for um child dentro, deixe transparente */
+  z-index: 0;               /* fica atrás do conteúdo da timeline */
+}
+
+/* se a linha for o elemento interno .v-progress */
+.timeline-wrap .v-progress{
+  position: absolute;
+  top: 0; bottom: 0; left: 0; right: 0;   /* ou defina largura específica */
+  margin: 0 auto;
+  width: 2px;
+  background: rgba(47,163,255,.25);       /* a linha em si */
+}
+
+/* 2) garanta que a nova seção fique acima dela */
+.culture-hero{ position: relative; z-index: 5; isolation: isolate; }
+
+/* 3) se por acaso existe alguma regra antiga com fixed, “apague” */
+.v-rail, .v-progress{ position: absolute !important; }  /* só se necessário */
+.geo-map{ position:relative; }        /* ancora overlay */
+.geo-arcs{
+  position:absolute; inset:0;
+  z-index:2; pointer-events:none;
+}
+.pins{ position:absolute; inset:0; z-index:3; }
+.geo-map img{ display:block; width:100%; height:auto; z-index:1; }
+
+/* a nova seção hero NÃO deve cobrir o mapa anterior */
+.culture-hero.one{ position:relative; z-index:0; }  /* ou maior apenas se estiver abaixo no DOM */

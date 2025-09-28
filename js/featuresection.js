@@ -1,14 +1,14 @@
-// ==== PROGRESSO VERTICAL DA LINHA (corrigido) ====
+// ==== PROGRESSO VERTICAL + MARCAÇÃO DAS BOLINHAS ====
 function setupVerticalRailProgress(container){
-  const rail = document.querySelector('.v-rail');
-  const prog = document.getElementById('v-progress');
-  if (!container || !rail || !prog) return;
+  const rail  = document.querySelector('.v-rail');
+  const prog  = document.getElementById('v-progress');
+  const steps = Array.from(container?.querySelectorAll('.step') || []);
+  if (!container || !rail || !prog || steps.length === 0) return;
 
-  // limites da seção (do topo ao fim do container)
   function computeBounds(){
-    const rect = container.getBoundingClientRect();
-    const start = window.scrollY + rect.top;           // topo da seção
-    const end   = start + container.scrollHeight;      // fim da seção
+    const rect  = container.getBoundingClientRect();
+    const start = window.scrollY + rect.top;           // topo absoluto da seção
+    const end   = start + container.scrollHeight;      // fim absoluto da seção
     return { start, end };
   }
 
@@ -18,67 +18,73 @@ function setupVerticalRailProgress(container){
     const { start, end } = bounds;
     const mid = window.scrollY + window.innerHeight * 0.5; // meio da viewport
 
-    // linha só aparece quando estamos dentro da seção (com colchão)
-    const inSection = mid > (start - window.innerHeight * 0.15) &&
-                      mid < (end   + window.innerHeight * 0.15);
+    // rail só ativa dentro da seção
+    const inSection = mid > (start - window.innerHeight*0.15) &&
+                      mid < (end   + window.innerHeight*0.15);
     rail.classList.toggle('is-active', inSection);
 
-    if (inSection){
-      const raw = (mid - start) / (end - start);
-      const pct = Math.max(0, Math.min(1, raw));       // clamp 0..1
-      prog.style.height = (pct * 100) + 'vh';          // cresce dentro da rail fixa
-    }
+    // progresso 0..1 e altura da barra dentro da rail
+    const raw = (mid - start) / (end - start);
+    const pct = Math.max(0, Math.min(1, raw));
+    prog.style.height = (pct * 100) + 'vh';
+
+    // posição do progresso em PX dentro da SEÇÃO
+    const progressPx = pct * container.scrollHeight;
+
+    // marcar bolinhas já alcançadas + detectar step atual (mais perto do centro)
+    let current = null, bestDist = Infinity;
+    const vMid = window.innerHeight / 2;
+
+    steps.forEach(step => {
+      // alvo da bolinha (~meio do step). Quer acender antes? use 0.35
+      const dotCenter = step.offsetTop + step.offsetHeight * 0.5; // relativo ao container
+      const isPassed  = dotCenter <= progressPx + 1;              // tolerância 1px
+      step.classList.toggle('is-passed', isPassed);
+
+      // achar o step mais próximo do centro da viewport
+      const r = step.getBoundingClientRect();
+      const d = Math.abs((r.top + r.height/2) - vMid);
+      if (d < bestDist){ bestDist = d; current = step; }
+    });
+
+    // aplica “atual” em um único step
+    steps.forEach(s => s.classList.remove('is-current'));
+    if (current) current.classList.add('is-current');
   }
 
-  // Reage a rolagem/redimensionamento
   window.addEventListener('scroll', update, { passive:true });
   window.addEventListener('resize', () => { bounds = computeBounds(); update(); });
-
-  // Recalcula após o load (imagens/fontes)
-  window.addEventListener('load', () => { bounds = computeBounds(); update(); });
-
-  // Recalcula quando imagens internas terminarem de carregar
+  window.addEventListener('load',   () => { bounds = computeBounds(); update(); });
   container.querySelectorAll('img').forEach(img => {
-    if (!img.complete) {
-      img.addEventListener('load', () => { bounds = computeBounds(); update(); }, { once:true });
-    }
+    if (!img.complete) img.addEventListener('load', () => { bounds = computeBounds(); update(); }, { once:true });
   });
 
-  // Primeira medição
   bounds = computeBounds();
   update();
 }
 
-// Chame após configurar o reveal/zoom:
 // ===== REVEAL 1-a-1 (vertical) — aparece só o card central =====
 (function initReveal(){
   const container = document.getElementById('hscroll');
   if (!container) return;
   const steps = Array.from(container.querySelectorAll('.step'));
 
-  // garante o 1º visível no carregamento
-  steps.forEach(s => s.classList.remove('is-revealed'));
-  steps[0]?.classList.add('is-revealed');
+  // reseta e garante o primeiro visível/atual
+  steps.forEach(s => { s.classList.remove('is-revealed','is-current'); });
+  steps[0]?.classList.add('is-revealed','is-current');
 
-  // Usa IO para detectar quais estão no viewport
+  // IO para saber quem está na viewport
   let visibleSet = new Set();
   const io = new IntersectionObserver((entries) => {
     entries.forEach(en => {
-      if (en.isIntersecting) {
-        visibleSet.add(en.target);
-      } else {
-        visibleSet.delete(en.target);
-      }
+      if (en.isIntersecting) visibleSet.add(en.target);
+      else                   visibleSet.delete(en.target);
     });
-    pickCenter(); // decide qual fica revelado
-  }, {
-    root: null,
-    threshold: [0.25, 0.5, 0.75],
-    rootMargin: '0px 0px -10% 0px'
-  });
+    pickCenter();
+  }, { threshold: [0.25, 0.5, 0.75], rootMargin: '0px 0px -10% 0px' });
   steps.forEach(s => io.observe(s));
 
-  // escolhe o elemento mais próximo do centro da viewport e revela só ele
+  // revela só o step mais perto do centro da viewport
   function pickCenter(){
     if (!visibleSet.size) return;
     let best = null, bestDist = 1e9;
@@ -90,19 +96,19 @@ function setupVerticalRailProgress(container){
       if (d < bestDist){ bestDist = d; best = el; }
     });
     if (!best) return;
-
-    steps.forEach(s => s.classList.remove('is-revealed'));
-    best.classList.add('is-revealed');
+    steps.forEach(s => { s.classList.remove('is-revealed','is-current'); });
+    best.classList.add('is-revealed','is-current');
   }
 
-  // também decide ao rolar/redimensionar
   window.addEventListener('scroll', pickCenter, { passive:true });
   window.addEventListener('resize', pickCenter);
   window.addEventListener('load', pickCenter);
   setTimeout(pickCenter, 60);
 })();
-;
+
+// Inicializa a rail (chame após o DOM existir / use <script defer>)
 setupVerticalRailProgress(document.getElementById('hscroll'));
+
 // === Tilt suave no hover + brilho que acompanha o mouse ===
 (function enableCardTilt(){
   if (matchMedia('(hover: none)').matches) return; // mobile: sem tilt
@@ -121,7 +127,6 @@ setupVerticalRailProgress(document.getElementById('hscroll'));
       const rotX = (0.5 - py) * (MAX_ROT_X * 2);
       const rotY = (px - 0.5) * (MAX_ROT_Y * 2);
 
-      // agenda um frame para ficar suave
       if (raf) cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
         card.style.transform =
@@ -143,7 +148,8 @@ setupVerticalRailProgress(document.getElementById('hscroll'));
     card.addEventListener('mouseleave', onLeave);
   });
 })();
-// ===== Helpers do clique =====
+
+// ===== Helpers do clique (zoom -> vídeo) =====
 function getCardImgUrl(card){
   // 1) <img src>
   const tagImg = card.querySelector('img');
@@ -211,7 +217,10 @@ function animateZoomThenVideo(card){
   const ghost = document.createElement('div');
   ghost.className = 'zoom-ghost';
   ghost.style.backgroundImage = imgUrl ? `url('${imgUrl}')` : 'none';
-  Object.assign(ghost.style, { left: rect.left+'px', top: rect.top+'px', width: rect.width+'px', height: rect.height+'px' });
+  Object.assign(ghost.style, {
+    left: rect.left+'px', top: rect.top+'px',
+    width: rect.width+'px', height: rect.height+'px'
+  });
   document.body.appendChild(ghost);
 
   const targetW = Math.min(innerWidth * 0.8, 900);
