@@ -288,8 +288,8 @@ document.querySelector('.geo-map')?.classList.add('map-readonly');
   // conjuntos por região (ajuste como quiser)
   const REGIONS = {
     north: new Set(['mia','mex']),                            // EUA/México
-    latam: new Set(['mex','bog','sp','rj','ba','bsb','bue']), // América Latina
-    south: new Set(['sp','rj','ba','bsb','bue'])              // América do Sul
+    latam: new Set([,'bog','bue']), // América Latina
+    brazil: new Set(['sp','rj','ba','bsb'])              // América do Sul
   };
 
   // --- helpers ---
