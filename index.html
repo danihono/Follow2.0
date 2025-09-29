@@ -19,6 +19,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bellota+Text:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 
     <!-- Custom CSS -->
@@ -35,10 +37,12 @@
 <script src="js/./featuresection.js" defer></script>
 <script src="js/./featuresection.js" defer></script>
 <script src="js/./presence.js" defer></script>
+<script src="js/./3d.js" defer></script>
 
 
 </head>
 <body>
+   <div class="site-bg" aria-hidden="true"></div>
   <!-- Cabeçalho / Navegação -->
   <header class="site-header">
     <nav class="nav container">
@@ -65,7 +69,7 @@
     </nav>
   </header>
 
-  <section class="hero" id="inicio" aria-label="Seção inicial">
+  <section class="hero" data-tone="0" id="inicio" aria-label="Seção inicial">
   <!-- Vídeo de fundo -->
   <video class="hero-bg"
          autoplay
@@ -74,7 +78,7 @@
          playsinline
          preload="auto"
          poster="images/video/poster-inicio.jpg">
-    <source src="images/video/inicio.mp4" type="video/mp4" />
+    <source src="images\video\raios.mp4" type="video/mp4" />
     Seu navegador não suporta vídeo HTML5.
   </video>
 <div class="hero-dim" aria-hidden="true"></div>
@@ -91,14 +95,16 @@
   </div>
 </section>
 
-<section id="about" class="section py-5">
+<section id="about" data-tone="1" class="sobre section py-5">
+
   <div class="container">
 
     <div class="row mb-5 wipe">
       <div class="col-12">
-        <h2 class="section-title about-title" data-i18n="about-title">
-          Sobre a Follow Advisor
-        </h2>
+        <h2 class="section-title about-title reveal" data-reveal="up" data-delay="500" data-i18n="about-title">
+  Sobre a Follow Advisor
+</h2>
+
       </div>
     </div>
 
@@ -112,7 +118,7 @@
 
     <!-- Orbit de cards com vidro + conteúdo -->
 <!-- BLOCO: TEXTOS à ESQUERDA | CARROSSEL à DIREITA -->
-  <section class="section orbit-block">
+  <section data-tone="2" class="section orbit-block"> 
     <div class="container orbit-grid">
 
       <!-- ESQUERDA: (deixe vazio por enquanto; depois você preenche) -->
@@ -237,7 +243,7 @@
 </div>
 </div>
   </div>
-<section class="geo-hero" aria-labelledby="geo-title">
+<section class="geo-hero" data-tone="3" aria-labelledby="geo-title">
   <h2 id="geo-title" class="geo-title">Presença nas Américas</h2>
 
   <div class="geo-wrap">
@@ -247,13 +253,13 @@
      <!-- ... -->
   <div class="pins">
     <button class="pin pin--dc"  style="--x:45.3%; --y:67.5%" data-id="sp"   data-city="São Paulo"></button>
-    <button class="pin pin--yard" style="--x:48.5%; --y:65.9%" data-id="rj"   data-city="Rio de Janeiro"></button>
-    <button class="pin pin--truck"style="--x:48.7%; --y:61.0%" data-id="ba"   data-city="Bahia"></button>
+    <button class="pin pin--dc" style="--x:48.5%; --y:65.9%" data-id="rj"   data-city="Rio de Janeiro"></button>
+    <button class="pin pin--dc"style="--x:48.7%; --y:61.0%" data-id="ba"   data-city="Bahia"></button>
     <button class="pin pin--dc"  style="--x:44.9%; --y:59.5%" data-id="bsb"  data-city="Brasilia"></button>
     <button class="pin pin--yard" style="--x:38.0%; --y:50.7%" data-id="bog"  data-city="Bogotá"></button>
     <button class="pin pin--truck"style="--x:35.1%; --y:36.7%" data-id="mia"  data-city="Miami"></button>
     <button class="pin pin--truck"style="--x:30.7%; --y:42.9%" data-id="mex"  data-city="México"></button>
-    <button class="pin pin--truck"style="--x:41.9%; --y:75.4%" data-id="bue"  data-city="Buenos Aires"></button>
+    <button class="pin pin--yard"style="--x:41.9%; --y:75.4%" data-id="bue"  data-city="Buenos Aires"></button>
   </div>
 
   <!-- SVG vazio: os arcos serão inseridos por JS -->
@@ -266,20 +272,20 @@
 
     <!-- Coluna lateral: legenda + CTA -->
     <aside class="geo-panel" aria-label="Legenda e ações">
-      <ul class="legend">
-        <li><span class="dot dot--truck"></span> Truckload Services</li>
-        <li><span class="dot dot--yard"></span> Container Yards</li>
-        <li><span class="dot dot--dc"></span> Distribution Centers</li>
-      </ul>
+      <ul class="legend regions">
+  <li><button type="button" class="region-btn" data-region="north">
+    <span class="dot dot--truck"></span> América do Norte
+  </button></li>
 
-      <div class="zones">
-        <p>Regiões de atendimento (exemplo)</p>
-        <div class="swatches">
-          <span><i class="sw-1"></i> 1 dia</span>
-          <span><i class="sw-2"></i> 2 dias</span>
-          <span><i class="sw-3"></i> 3 dias</span>
-        </div>
-      </div>
+  <li><button type="button" class="region-btn" data-region="latam">
+    <span class="dot dot--yard"></span> América Latina
+  </button></li>
+
+  <li><button type="button" class="region-btn" data-region="south">
+    <span class="dot dot--dc"></span> América do Sul
+  </button></li>
+</ul>
+
 
       <h3 class="panel-title">Cobertura logística nas Américas</h3>
       <a class="cta" href="#contato">
@@ -299,27 +305,7 @@
 
 
 <!-- DIVISÃO – Alcance Global -->
-<section id="alcance" class="split-hero">
-  <!-- Slides de fundo (troque as imagens pelos seus arquivos) -->
-  <div class="slides">
-    <img src="images\hero-bg\bg-1.jpg" alt="Equipe em reunião">
-    <img src="images\hero-bg\bg-2.jpg"alt="Operações logísticas">
-    <img src="images\hero-bg\bg-3.jpg" alt="Parceiros globais">
-    <img src="images\hero-bg\bg-4.jpg" alt="Parceiros globais">
-    <img src="images\hero-bg\bg-5.jpg" alt="Parceiros globais">
-    <img src="images\hero-bg\bg-6.jpg" alt="Parceiros globais">
-    <img src="images\hero-bg\bg-7.jpg" alt="Parceiros globais">
-  </div>
 
-  <!-- Card na frente -->
-  <div class="panel">
-    <h2>Alcance Global, Expertise Local</h2>
-    <p>
-      Nossa rede abrange continentes, garantindo que suas necessidades logísticas
-      sejam atendidas com precisão e cuidado, não importa o destino.
-    </p>
-  </div>
-</section><br>
 <br>
 <br>
 <br>
@@ -328,7 +314,7 @@
 <br>
 
 
-  <section class="timeline-wrap" aria-labelledby="tl-title">
+  <section class ="timeline-wrap" data-tone="2" aria-labelledby="tl-title">
    <div class="tl-head">
     <h2 id="tl-title">Nossos Serviços</h2>
     <p class="tl-subtitle">Atendimento em Português, Inglês e Espanhol (incluindo relatórios sob demanda)</p>
@@ -499,39 +485,88 @@
 </div>
 </div>
   </div>
- <section class="culture-hero one" aria-labelledby="culture-title">
-  <div class="hero-media">
-    <img src="images/marcelodafne.png" alt="Nosso time">
+<!-- ===== HERO TRUCK ===== -->
+
+
+<section class="truck-hero" data-tone="1" aria-label="Destaques do caminhão">
+  <!-- imagem full-bleed (fica por cima do fundo) -->
+  <img
+    src="images/Image_fx (65).jpg"
+    alt="Caminhão preto em estúdio com iluminação de foco"
+    class="truck-hero__img reveal"
+    data-reveal="up"
+    style="--d:0ms"
+    loading="eager" decoding="async">
+
+  <!-- véu/gradiente opcional para contraste do texto -->
+  <div class="truck-hero__shade" aria-hidden="true"></div>
+
+  <!-- Bloco topo-esquerda -->
+  <div class="ha-block ha-top-left reveal" data-reveal="left" style="--d:120ms">
+    <div class="ha-row">
+     <span class="ha-ico" aria-hidden="true">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"
+       width="28" height="28" fill="none" stroke="currentColor"
+       stroke-linecap="round" stroke-linejoin="round">
+    <rect width="256" height="256" fill="none"/>
+    <path d="M88,136a40,40,0,1,1-40,40v-6.73" stroke-width="16"/>
+    <path d="M168,136a40,40,0,1,0,40,40v-6.73" stroke-width="16"/>
+    <path d="M72,172H64A48,48,0,0,1,48,78.73V72a40,40,0,0,1,80,0V176" stroke-width="16"/>
+    <path d="M184,172h8a48,48,0,0,0,16-93.27V72a40,40,0,0,0-80,0" stroke-width="16"/>
+    <path d="M200,112h-4a28,28,0,0,1-28-28V80" stroke-width="16"/>
+    <path d="M56,112h4A28,28,0,0,0,88,84V80" stroke-width="16"/>
+  </svg>
+</span>
+
+      <div>
+        <h3 class="ha-h3">Experiência<br>Especializada</h3>
+        <p class="ha-p">Conhecimento especializado na área, <br>oferecendo insights valiosos para sua empresa.</p>
+      </div>
+    </div>
   </div>
 
-  <div class="heroi-shade" aria-hidden="true"></div>
+  <!-- Bloco base-esquerda -->
+  <div class="ha-block ha-bottom-left reveal" data-reveal="left" style="--d:220ms">
+    <div class="ha-row">
+       <span class="ha-ico" aria-hidden="true">
+      <!-- SVG que você mandou -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"
+           width="28" height="28" fill="none" stroke="currentColor"
+           stroke-linecap="round" stroke-linejoin="round">
+        <rect width="256" height="256" fill="none"/>
+        <polygon points="160 16 144 96 208 120 96 240 112 160 48 136 160 16"
+                 stroke-width="16"/>
+      </svg>
+    </span>
+      <div>
+        <h3 class="ha-h3">Objetividade<br>e Eficiência</h3>
+        <p class="ha-p">Perspectiva externa e objetiva, identificando problemas <br> e propondo soluções sem envolvimento emocional.</p>
+      </div>
+    </div>
+  </div>
 
-  <div class="hero-content">
-    <h2 id="culture-title" class="hero-title">
-      A TEAM CULTURE<br>BUILT TO <span class="accent">WIN</span>
-    </h2>
-    <a href="#carreiras" class="hero-cta">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 1 0 18 9 9 0 0 1 0-18Zm1.06 5.44 3.5 3.5a1.5 1.5 0 0 1 0 2.12l-3.5 3.5a1 1 0 1 1-1.42-1.42l2.44-2.44H7a1 1 0 1 1 0-2h7.08l-2.44-2.44a1 1 0 0 1 1.42-1.42Z"/></svg>
-      Ready to join our team?
-    </a>
+  <!-- Bloco direita (meio-baixo) -->
+  <div class="ha-block ha-right reveal" data-reveal="right" style="--d:180ms">
+    <div class="ha-row">
+      <span class="ha-ico" aria-hidden="true">
+      <!-- SVG que você mandou -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"
+           width="28" height="28" fill="none" stroke="currentColor"
+           stroke-linecap="round" stroke-linejoin="round">
+        <rect width="256" height="256" fill="none"/>
+        <rect x="32" y="64" width="192" height="144" rx="8" stroke-width="16"/>
+        <path d="M168,64V48a16,16,0,0,0-16-16H104A16,16,0,0,0,88,48V64" stroke-width="16"/>
+        <path d="M224,118.31A191.09,191.09,0,0,1,128,144a191.14,191.14,0,0,1-96-25.68" stroke-width="16"/>
+        <line x1="112" y1="112" x2="144" y2="112" stroke-width="16"/>
+      </svg>
+    </span>
+      <div>
+        <h3 class="ha-h3">Resolução de<br>Problemas</h3>
+        <p class="ha-p">Resolvemos desafios complexos <br> e implementamos mudanças que trazem resultados reais.</p>
+      </div>
+    </div>
   </div>
 </section>
-
-
- 
-
-
-
-
-
-
-
-</section>
-  </body>
-</html>
-
-
-
 
 
 

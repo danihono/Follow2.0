@@ -134,7 +134,14 @@
     ['bue','sp'],     // exemplo extra
     ['ba','mia'],    // exemplo extra
     ['bsb','bue'],    // exemplo extra
-  ];
+    ['rj','mex'],    // exemplo extra
+    ['mia','sp'],    // exemplo extra
+    ['mex','rj'], 
+    ['sp','mia'],
+  
+];
+       // exemplo extra
+  
 
   // pega --x/--y do CSS (em %)
   function getPinXYpct(pin){
@@ -186,3 +193,239 @@ document.querySelectorAll('body > div').forEach(el=>{
 
 // (opcional) desativa cliques no mapa, sem remover listeners:
 document.querySelector('.geo-map')?.classList.add('map-readonly');
+// anima as rotas já criadas pelo makeArcs (linha lisa desenhando A -> B)
+(function animateArcsCycle(){
+  const svg = document.querySelector('.geo-arcs');
+  if (!svg) return;
+
+  // garante que os <path.arc> já existem (ordem de execução)
+  const start = () => {
+    const arcs = [...svg.querySelectorAll('.arc')];
+    if (!arcs.length) return;
+
+    // tempos (ajuste à vontade)
+    const DRAW_MS = 3200;   // tempo para desenhar de ponta a ponta
+    const HOLD_MS = 1200;   // tempo totalmente desenhado (parado)
+    const FADE_MS = 420;    // fade para apagar
+    const STAGGER = 160;    // atraso incremental entre arcos (0 = todos juntos)
+
+    // mede comprimentos e prepara estado inicial
+    const lens = arcs.map(p => {
+      const L = p.getTotalLength();
+      p.style.animation  = 'none';   // evita conflitos de CSS
+      p.style.transition = 'none';
+      p.style.strokeDasharray  = `${L}`;
+      p.style.strokeDashoffset = `${L}`; // “vazio”: pronto pra revelar
+      p.style.opacity = '0';
+      return L;
+    });
+
+    function run(){
+      // desenha A -> B devagar (cada um com um pequeno atraso)
+      arcs.forEach((p, i) => {
+        const L = lens[i];
+        p.style.transition = 'none';
+        p.style.strokeDasharray  = `${L}`;
+        p.style.strokeDashoffset = `${L}`;
+        p.style.opacity = '1'; // visível, mas “vazio”
+
+        setTimeout(() => {
+          p.style.transition = `stroke-dashoffset ${DRAW_MS}ms cubic-bezier(.22,1,.36,1)`;
+          p.style.strokeDashoffset = '0'; // revela do início ao fim
+        }, STAGGER * i);
+      });
+
+      // depois que todos terminam + hold, fade e reset
+      const total = STAGGER * (arcs.length - 1) + DRAW_MS + HOLD_MS;
+
+      setTimeout(() => {
+        // apaga
+        arcs.forEach(p => {
+          p.style.transition = `opacity ${FADE_MS}ms ease`;
+          p.style.opacity = '0';
+        });
+
+        // reseta e reinicia o ciclo
+        setTimeout(() => {
+          arcs.forEach((p, i) => {
+            const L = lens[i];
+            p.style.transition = 'none';
+            p.style.strokeDasharray  = `${L}`;
+            p.style.strokeDashoffset = `${L}`;
+          });
+          run();
+        }, FADE_MS + 20);
+      }, total);
+    }
+
+    run();
+  };
+
+  // se makeArcs já rodou, começa; se não, espera 1 frame
+  if (svg.querySelector('.arc')) {
+    start();
+  } else {
+    requestAnimationFrame(start);
+  }
+})();
+// === FILTRO POR REGIÃO + RESTART DOS ARCOS ===
+(function geoFiltersAndArcs(){
+  const svg  = document.querySelector('.geo-arcs');
+  const pins = [...document.querySelectorAll('.pins .pin')];
+  const regionBtns = [...document.querySelectorAll('.legend.regions [data-region]')];
+  const cta = document.querySelector('.geo-panel .cta');
+  if(!svg || !pins.length || !regionBtns.length) return;
+
+  // mapa: id do pino -> elemento
+  const byId = Object.fromEntries(pins.map(p => [p.dataset.id, p]));
+
+  // use os mesmos links que você já usa no makeArcs:
+  const LINKS = [
+    ['sp','mia'], ['sp','mex'], ['bog','sp'],
+    ['bue','sp'], ['ba','mia'], ['bsb','bue'] 
+  ];
+
+  // conjuntos por região (ajuste como quiser)
+  const REGIONS = {
+    north: new Set(['mia','mex']),                            // EUA/México
+    latam: new Set(['mex','bog','sp','rj','ba','bsb','bue']), // América Latina
+    south: new Set(['sp','rj','ba','bsb','bue'])              // América do Sul
+  };
+
+  // --- helpers ---
+  function clearArcs(){ svg.innerHTML = ''; }
+
+  // desenha só as rotas cujos dois pontos estão na região
+  function drawArcsFor(regionSet){
+    clearArcs();
+    LINKS.forEach(([a,b])=>{
+     if(!(regionSet.has(a) || regionSet.has(b))) return;
+      const pa = byId[a], pb = byId[b];
+      if(!pa || !pb) return;
+
+      // lê --x/--y (%), converte pra viewBox (1000 x 600)
+      const VBW=1000, VBH=600;
+      const getPct = el => {
+        const cs = getComputedStyle(el);
+        return {
+          x: parseFloat(cs.getPropertyValue('--x')) || 0,
+          y: parseFloat(cs.getPropertyValue('--y')) || 0
+        };
+      };
+      const A = getPct(pa), B = getPct(pb);
+      const p1 = { x: A.x/100*VBW, y: A.y/100*VBH };
+      const p2 = { x: B.x/100*VBW, y: B.y/100*VBH };
+
+      // curva suave (mesma lógica do seu makeArcs)
+      const dx = p2.x - p1.x, dy = p2.y - p1.y;
+      const len = Math.hypot(dx, dy) || 1;
+      const k = Math.min(0.35, 0.22 + len/1400*0.12);
+      const c1 = { x: p1.x + dx*k, y: p1.y - Math.abs(dy)*k*1.2 };
+      const c2 = { x: p2.x - dx*k, y: p2.y - Math.abs(dy)*k*1.2 };
+      const d  = `M ${p1.x|0} ${p1.y|0} C ${c1.x|0} ${c1.y|0}, ${c2.x|0} ${c2.y|0}, ${p2.x|0} ${p2.y|0}`;
+
+      const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+      path.setAttribute('class','arc');
+      path.setAttribute('d', d);
+      svg.appendChild(path);
+    });
+
+    // anima ciclo (desenha -> segura -> apaga -> repete)
+    animateCycle();
+  }
+
+  // aplica dim nos pinos fora do conjunto
+  function dimPins(regionSet){
+    pins.forEach(p => p.classList.toggle('is-dim', !regionSet.has(p.dataset.id)));
+  }
+
+  // estado UI ativo
+  function setActive(btn){
+    regionBtns.forEach(b => b.classList.toggle('is-active', b === btn));
+  }
+
+  // animação dos arcos (independente do makeArcs)
+  function animateCycle(){
+    const arcs = [...svg.querySelectorAll('.arc')];
+    if(!arcs.length) return;
+
+    const DRAW_MS = 3200, HOLD_MS = 1000, FADE_MS = 380, STAGGER = 140;
+
+    // prepara
+    const lens = arcs.map(p => {
+      const L = p.getTotalLength();
+      p.style.animation = 'none';
+      p.style.transition = 'none';
+      p.style.strokeDasharray  = `${L}`;
+      p.style.strokeDashoffset = `${L}`;
+      p.style.opacity = '0';
+      return L;
+    });
+
+    function run(){
+      arcs.forEach((p,i)=>{
+        const L = lens[i];
+        p.style.transition = 'none';
+        p.style.strokeDasharray  = `${L}`;
+        p.style.strokeDashoffset = `${L}`;
+        p.style.opacity = '1';
+        setTimeout(()=>{
+          p.style.transition = `stroke-dashoffset ${DRAW_MS}ms cubic-bezier(.22,1,.36,1)`;
+          p.style.strokeDashoffset = '0';
+        }, STAGGER*i);
+      });
+
+      const total = STAGGER*(arcs.length-1)+DRAW_MS+HOLD_MS;
+      setTimeout(()=>{
+        arcs.forEach(p=>{
+          p.style.transition = `opacity ${FADE_MS}ms ease`;
+          p.style.opacity = '0';
+        });
+        setTimeout(()=>{
+          arcs.forEach((p,i)=>{
+            const L = lens[i];
+            p.style.transition = 'none';
+            p.style.strokeDasharray  = `${L}`;
+            p.style.strokeDashoffset = `${L}`;
+          });
+          run();
+        }, FADE_MS + 20);
+      }, total);
+    }
+    run();
+  }
+
+  // aplica região escolhida
+  function applyRegion(key){
+    const set = REGIONS[key] || new Set();
+    dimPins(set);
+    drawArcsFor(set);
+  }
+
+  // listeners nos 3 itens
+  regionBtns.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      setActive(btn);
+      applyRegion(btn.dataset.region);
+    });
+  });
+
+  // botão “Explorar localidades” só reinicia as rotas da região ativa
+  cta?.addEventListener('click', (e)=>{
+    e.preventDefault();
+    const active = regionBtns.find(b=>b.classList.contains('is-active')) || regionBtns[0];
+    if(active){
+      setActive(active);
+      applyRegion(active.dataset.region); // redesenha e reinicia ciclo
+    }
+  });
+
+  // inicial: marca uma região e aplica
+  setActive(regionBtns[0]);
+  applyRegion(regionBtns[0].dataset.region);
+})();
+// antes (pegava <li>):
+// const items = ul ? [...ul.querySelectorAll('li')] : [];
+
+// depois (pega qualquer elemento com data-region — inclusive <button>):
+const items = ul ? [...ul.querySelectorAll('[data-region]')] : [];

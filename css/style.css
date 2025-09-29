@@ -123,7 +123,7 @@ body{
 .btn-primary{
   background: var(--accent);
   color: #001223;
-  border: 1px solid rgba(255,255,255,.12);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   font-weight: 600;
 }
 .btn-primary:hover{ filter: brightness(1.05); }
@@ -240,11 +240,74 @@ body{
   margin: 8px 0 0 0;
   max-width: 62ch;
 }
+/* Garante que nada clipe a animação do reveal */
+#about,
+#about .container,
+#about .row,
+#about .wipe{
+  overflow: visible !important;
+}
+
+/* Cria um contexto de empilhamento próprio p/ ficar acima de fades da seção anterior */
+#about{
+  position: relative;
+  isolation: isolate; /* força o conteúdo a “mandar” na pilha */
+}
+
+/* Se existir qualquer sombra/gradiente da seção (before/after), deixa ATRÁS */
+#about::before,
+#about::after{
+  content:"";
+  position:absolute;
+  left:0; right:0;
+  height:var(--fade-size,56px);
+  pointer-events:none;
+  z-index:-1;        /* fica atrás do conteúdo */
+  background: none;  /* ou seu gradiente, se usar */
+}
+
+/* Conteúdo sempre acima */
+#about .about-title,
+#about p.lead{
+  position: relative;
+  z-index: 1;
+}
+
+/* (opcional) suaviza a transição e evita “tremida” em alguns browsers */
+.reveal{ backface-visibility:hidden; -webkit-font-smoothing:antialiased; }
+
 
 @media (max-width: 992px){
   #about .about-title{ font-size: clamp(2rem, 8vw, 3.2rem); }
   #about p.lead{ max-width: 65ch; }
 }
+/* estado inicial (escondido) */
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+  will-change: opacity, transform;
+  transition:
+    opacity .6s ease,
+    transform .6s cubic-bezier(.22,.61,.36,1);
+}
+
+/* direções opcionais */
+.reveal[data-reveal="up"]    { transform: translate3d(0, 24px, 0); }
+.reveal[data-reveal="down"]  { transform: translate3d(0,-24px, 0); }
+.reveal[data-reveal="left"]  { transform: translate3d(24px, 0, 0); }
+.reveal[data-reveal="right"] { transform: translate3d(-24px,0, 0); }
+
+/* quando ficar visível */
+.reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0,0,0);
+}
+
+/* título com um pouquinho mais de “peso” no movimento */
+.about-title.reveal {
+  text-shadow: 0 2px 0 rgba(0,0,0,.15), 0 12px 28px rgba(0,0,0,.45);
+}
+
 /* Visível por padrão */
 .reveal{ opacity:1; transform:none; filter:none; }
 
@@ -632,7 +695,7 @@ body{
   font-size: clamp(3rem, 2vw, 2rem);
 }
 .orbit-copy p{
-  font-family: "Barlow Semi Condensed", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   font-weight: 500;                   /* 400 se quiser mais leve */
   letter-spacing: .01em;
   line-height: 1.6;
@@ -1753,6 +1816,427 @@ body{
 }
 .pins{ position:absolute; inset:0; z-index:3; }
 .geo-map img{ display:block; width:100%; height:auto; z-index:1; }
+.hero-img{
+  position: relative;
+  min-height: 100vh;        /* ocupa a altura toda da janela */
+  background: #000;         /* fallback nas bordas/letterbox */
+  overflow: hidden;
+}
+/* mantém linha lisa + glow; JS controla a animação */
+.geo-arcs .arc{
+  fill: none;
+  stroke: #2FA3FF;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 8px rgba(47,163,255,.85));
+  opacity: 0;                 /* começa invisível até o JS desenhar */
+  animation: none !important; /* mata qq animação antiga de CSS */
+}
+/* pinos “apagados” quando fora do filtro */
+.pins .pin.is-dim{
+  opacity: .18;
+  filter: saturate(.4) blur(.2px);
+}
 
-/* a nova seção hero NÃO deve cobrir o mapa anterior */
-.culture-hero.one{ position:relative; z-index:0; }  /* ou maior apenas se estiver abaixo no DOM */
+/* feedback visual no item ativo (opcional) */
+.legend.regions [data-region]{
+  cursor: pointer;
+  transition: filter .2s ease, background .2s ease;
+}
+.legend.regions [data-region].is-active{
+  background: rgba(47,163,255,.10);
+  border-color: rgba(47,163,255,.35);
+  box-shadow: inset 0 0 0 1px rgba(47,163,255,.20);
+}
+
+.hero-img__media{
+  position: absolute; inset: 0; /* cola nas bordas da seção */
+  width: 100%; height: 100%;
+  object-fit: cover;       /* cobre tudo; pode cortar um pouco */
+  object-position: center; /* foca no meio (ajuste se quiser) */
+  display: block;
+  opacity: 1; filter: none; /* garante que nada deixe “fosco” */
+}
+/* ====== BASE ====== */
+:root{
+  --ink: rgba(255,255,255,.88);
+  --muted: rgba(255,255,255,.80);
+  --accent: #E9DCC5;              /* creme da referência */
+  --safe-pad: clamp(16px, 4vw, 56px);
+}
+.truck-hero{
+  position: relative;
+  min-height: min(100vh, 100svh);
+  background:#000;
+  overflow: hidden;
+  isolation:isolate;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  
+}
+
+/* imagem 100% (sem perder nitidez) */
+.truck-hero__img{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover; object-position:center;
+  display:block;
+  filter:none; opacity:1;           /* garante que não fique “fosca” */
+}
+
+/* Título grande centro-direita */
+.ha-title{
+  position:absolute;
+  top: 42%;
+  left: 50%;
+  transform: translate(0,-50%);
+  color: var(--accent);
+  margin:0;
+  font-weight:300;                   /* “fino” */
+  letter-spacing:.01em;
+  line-height:.95;
+  font-size: clamp(32px, 6.2vw, 72px);
+  text-shadow: 0 10px 30px rgba(0,0,0,.55);
+}
+
+/* blocos nos cantos */
+.ha-block{
+  position:absolute;
+  max-width: 36ch;
+  color: var(--ink);
+  text-shadow: 0 8px 28px rgba(0,0,0,.55);
+}
+.ha-top-left    { top: 22%; left: var(--safe-pad); }
+.ha-bottom-left { bottom: 16%; left: var(--safe-pad); }
+.ha-right       { right: var(--safe-pad); top: 56%; transform: translateY(-50%); }
+
+.ha-row{ display:flex; align-items:flex-start; gap:14px; }
+.ha-ico{ width:22px; height:22px; color: var(--accent); opacity:.95; flex:0 0 auto; }
+.ha-ico svg{ width:100%; height:100%; }
+
+/* títulos e parágrafos */
+.ha-h3{
+  margin:0 0 8px 0;
+  color: var(--accent);
+  font-weight:600;
+  line-height:1.05;
+  font-size: clamp(26px, 3.3vw, 46px);
+}
+.ha-p{
+  margin:0;
+  color: var(--muted);
+  font-weight:400;
+  font-size: clamp(14px, 1.4vw, 18px);
+  line-height:1.55;
+}
+
+/* responsivo: empilha à medida que estreita */
+@media (max-width: 980px){
+  .ha-title{ left: 46%; font-size: clamp(28px, 8vw, 54px); }
+  .ha-top-left{ top: 18%; }
+  .ha-right{ top: auto; bottom: 18%; transform:none; }
+}
+@media (max-width: 720px){
+  .ha-title{ position:static; transform:none; padding: 18vh var(--safe-pad) 0; display:block; }
+  .truck-hero{ min-height: 120svh; }
+  .ha-top-left{ top: auto; left: var(--safe-pad); right: var(--safe-pad); bottom: 50vh; }
+  .ha-right{ right: var(--safe-pad); left:auto; bottom: 28vh; }
+  .ha-bottom-left{ left: var(--safe-pad); right: var(--safe-pad); bottom: var(--safe-pad); }
+}
+/* seção e imagem full */
+.truck-hero{ position:relative; min-height:100vh; overflow:hidden; background:#000; }
+.truck-hero__img{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; object-position:center;
+}
+
+/* véu/gradiente (opcional) para parecer com a ref */
+
+
+/* blocos posicionados */
+.ha-block{ position:absolute; max-width:min(36ch, 42vw); color:#e9dcc5; }
+.ha-top-left{ left: clamp(18px,5vw,64px); top: clamp(60px, 18vh, 22vh); }
+.ha-bottom-left{ left: clamp(18px,5vw,64px); bottom: clamp(60px, 16vh, 20vh); }
+.ha-right{ right: clamp(18px,6vw,96px); top: 50%; transform: translateY(-20%); }
+
+.ha-row{ display:flex; align-items:flex-start; gap:12px; }
+.ha-ico{ width:22px; height:22px; color:#f1e5cb; opacity:.95; }
+.ha-ico svg{ width:100%; height:100%; display:block; }
+
+.ha-h3{
+  margin:0 0 6px 0;
+  font-family: "Bebas Neue", system-ui, sans-serif;
+  font-weight: 400; letter-spacing:.01em; line-height:.92;
+  font-size: clamp(36px, 6.4vw, 64px);
+  color:#e9dcc5; text-shadow:0 2px 18px rgba(0,0,0,.45);
+}
+.ha-p{
+  margin:0; color:rgba(255,255,255,.88);
+  font: 400 clamp(14px,1.25vw,18px)/1.6 "Inter", system-ui, sans-serif;
+}
+
+/* ---- reveal (mesmo esquema que combinamos) ---- */
+.reveal{ will-change:opacity,transform,filter; transition:opacity .8s ease, transform .8s ease, filter .8s ease; transition-delay:var(--d,0ms); }
+.fx-ready .reveal{ opacity:0; filter:blur(6px); }
+.fx-ready .reveal[data-reveal="up"]{ transform:translateY(28px); }
+.fx-ready .reveal[data-reveal="left"]{ transform:translateX(28px); }
+.fx-ready .reveal[data-reveal="right"]{ transform:translateX(-28px); }
+.reveal.in{ opacity:1; transform:none; filter:none; }
+
+@media (prefers-reduced-motion: reduce){
+  .reveal{ transition:none !important; opacity:1 !important; transform:none !important; filter:none !important; }
+}
+/* ========= BG GLOBAL: preto + “luz” superior direita ========= */
+/* não conflita com suas variáveis; funciona sozinho */
+.site-bg{
+  position: fixed;
+  inset: 0;
+  z-index: -1;                  /* fica atrás de tudo */
+  background: #000;             /* base preta sólida (sem ruído) */
+  overflow: hidden;
+  pointer-events: none;         /* não intercepta cliques/scroll */
+}
+
+/* textura/gradiente estático (sua imagem) */
+.site-bg::before{
+  content: "";
+  position: absolute; inset: 0;
+  /* troque o caminho se necessário */
+  background:
+    /* leve vinheta para as bordas sumirem suave */
+    radial-gradient(120% 90% at 50% 50%, rgba(0,0,0,.0), rgba(0,0,0,.45) 70%),
+    /* sua imagem/textura de gradiente */
+    url("images/gradient.png") top right / 900px auto no-repeat;
+  opacity: .55;                 /* intensidade da textura */
+  filter: saturate(1.05) contrast(1.05);
+}
+
+/* “foco de luz” suave com blur (a elipse branca difusa) */
+.site-bg::after{
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 22%;
+  width: 30rem;                 /* controla o tamanho da mancha */
+  height: 0;                    /* truque do box-shadow elíptico */
+  rotate: -28deg;
+  /* raio do brilho controlado pelo 3º e 4º valores */
+  box-shadow: 0 0 700px 140px rgba(255,255,255,.16);
+  opacity: .95;
+}
+
+/* -------- ajustes finos opcionais -------- */
+
+/* em telas muito grandes, aumente a textura e o brilho */
+@media (min-width: 1400px){
+  .site-bg::before{
+    background:
+      radial-gradient(120% 90% at 50% 50%, rgba(0,0,0,.0), rgba(0,0,0,.45) 70%),
+      url("images/gradient.png") top right / 1100px auto no-repeat;
+  }
+  .site-bg::after{
+    box-shadow: 0 0 900px 180px rgba(255,255,255,.16);
+  }
+}
+
+/* em mobile, suavize um pouco a luz para não “estourar” */
+@media (max-width: 480px){
+  .site-bg::after{
+    box-shadow: 0 0 520px 120px rgba(255,255,255,.14);
+  }
+}
+/* no final do arquivo */
+:root{ --accent:#2FA3FF; }
+/* ===== DESIGN TOKENS GLOBAIS ===== */
+:root{
+  /* rampas do mesmo preto (evite “novos pretos” por seção) */
+  --surface-0: #0A0C10;
+  --surface-1: #0C1016;
+  --surface-2: #0E1220;
+  --surface-3: #11162A;
+
+  /* acentos coerentes */
+  --accent: #2FA3FF;
+  --accent-weak: rgba(47,163,255,.22);
+
+  /* vidro e sombras unificados */
+  --glass-tint: 124 201 255;             /* 7CC9FF */
+  --glass-blur: 14px;
+  --elev-1: 0 10px 26px rgba(0,0,0,.28);
+  --elev-2: 0 18px 40px rgba(0,0,0,.45);
+
+  /* movimento (use sempre estes) */
+  --ease-out: cubic-bezier(.22,1,.36,1);
+  --dur-hover: 240ms;
+  --dur-reveal: 720ms;
+  --stagger: 100ms;
+}
+
+/* aplica a rampa sem trocar o BG global */
+.section{ --fade-color: var(--surface-0); background: var(--surface-0); }
+.section[data-tone="1"]{ background: var(--surface-1); --fade-color: var(--surface-1); }
+.section[data-tone="2"]{ background: var(--surface-2); --fade-color: var(--surface-2); }
+.section[data-tone="3"]{ background: var(--surface-3); --fade-color: var(--surface-3); }
+
+/* fade entre seções sempre igualzinho */
+.section::before{
+  height: 56px;
+  background: linear-gradient(to bottom, transparent, var(--fade-color));
+  opacity: .9;
+}
+
+/* easings/durações padronizadas */
+.reveal{
+  transition: opacity var(--dur-reveal) var(--ease-out),
+              transform var(--dur-reveal) var(--ease-out),
+              filter var(--dur-reveal) var(--ease-out);
+}
+.btn, .tech-card, .city, .cta{
+  transition: transform var(--dur-hover) var(--ease-out),
+              box-shadow var(--dur-hover) var(--ease-out),
+              filter var(--dur-hover) var(--ease-out),
+              border-color var(--dur-hover) var(--ease-out),
+              background var(--dur-hover) var(--ease-out);
+}
+/* ===== ASSINATURA VISUAL ÚNICA ===== */
+.card, .tech-card, .zoom-card, .geo-panel, .city{
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: var(--elev-1);
+  background:
+    radial-gradient(120% 80% at 20% 0%, var(--accent-weak), transparent 60%),
+    rgba(255,255,255,.03);
+}
+
+.glass, .zoom-card, .geo-panel{
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(120%);
+          backdrop-filter: blur(var(--glass-blur)) saturate(120%);
+  background: rgb(var(--glass-tint) / .14);
+  border: 1px solid rgb(var(--glass-tint) / .45);
+  box-shadow: var(--elev-2), inset 0 1px 0 rgb(var(--glass-tint) / .35);
+}
+
+/* Botões primários e “chips” iguais em todo lugar */
+.btn-primary, .cta, .city .label .tag{
+  background: linear-gradient(180deg, #29A3FF, #198DEB);
+  border-color: rgba(255,255,255,.16);
+  color: #001223;
+  font-weight: 600;
+  box-shadow: 0 10px 26px rgba(24,178,255,.25);
+}
+.btn-ghost{
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.18);
+  color: #fff;
+}
+/* ===== DIVISORES SUAVES ===== */
+.section[data-divider="top"]::before{
+  height: 84px; opacity: 1;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.02), transparent 30%),
+    linear-gradient(180deg, transparent, var(--fade-color) 80%);
+}
+
+.section .section-cap{
+  position: relative; isolation: isolate; padding-top: 24px;
+}
+.section .section-cap::before{
+  content:""; position:absolute; inset:-24px 0 auto 0; height: 24px;
+  background: linear-gradient(180deg, rgba(255,255,255,.04), transparent);
+  opacity:.7;
+}
+.page-rail{
+  position: fixed; left: clamp(16px, 5vw, 64px); top: 0; bottom: 0;
+  width: 1px; background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04));
+  opacity: .5; pointer-events: none; z-index: 2;
+}
+/* aplica atrasos crescentes dentro de cada bloco marcado com [data-stagger] */
+[data-stagger] > *{
+  transition-delay: var(--d, 0ms);
+}
+[data-stagger] > *:nth-child(1){ --d: 0ms; }
+[data-stagger] > *:nth-child(2){ --d: calc(var(--stagger) * 1); }
+[data-stagger] > *:nth-child(3){ --d: calc(var(--stagger) * 2); }
+[data-stagger] > *:nth-child(4){ --d: calc(var(--stagger) * 3); }
+/* …repita conforme necessidade */
+/* mesmo fundo base das duas (se já usa outro, mantenha) */
+:root{ --surface:#0b0b0b; }
+
+/* garante que as duas encostem sem gap */
+.timeline-wrap{ position:relative; background:var(--surface); }
+.truck-hero{ position:relative; background:var(--surface); margin-top:0; }
+
+/* fade no RODAPÉ da timeline para “desaparecer” na próxima seção */
+.timeline-wrap::after{
+  content:"";
+  position:absolute;
+  left:0; right:0; bottom:-1px;
+  height:80px;                      /* ajuste a altura do fade */
+  pointer-events:none;
+  background:linear-gradient(
+    to bottom,
+    rgba(0,0,0,0) 0%,
+    var(--surface) 100%
+  );
+  z-index: 1;                        /* acima do fundo, abaixo do conteúdo */
+}
+
+/* fade no TOPO do truck-hero para receber o anterior (opcional, mas ajuda) */
+.truck-hero::before{
+  content:"";
+  position:absolute;
+  left:0; right:0; top:-1px;
+  height:80px;
+  pointer-events:none;
+  background:linear-gradient(
+    to top,
+    rgba(0,0,0,0) 0%,
+    var(--surface) 100%
+  );
+  z-index: 1;
+}
+
+/* se houver um “degrau” por margem do h2/p da timeline, zera só embaixo */
+.timeline-wrap .tl-head{ margin-bottom: clamp(12px,2vw,20px); }
+
+/* (opcional) dá uma escurecida só no topo da imagem do caminhão
+   para o fade “grudar” melhor sem alterar seu CSS existente */
+.truck-hero .truck-hero__shade{
+  position:absolute; inset:0;
+  background: linear-gradient(180deg, rgba(0,0,0,.35), transparent 40%);
+  pointer-events:none;
+}
+:root{ --neon:#2FA3FF; }
+
+.truck-hero .ha-ico{ color: var(--neon); }
+.truck-hero .ha-ico svg{
+  filter:
+    drop-shadow(0 0 6px rgba(47,163,255,.55))
+    drop-shadow(0 0 14px rgba(47,163,255,.35));
+}
+.truck-hero .ha-block:hover .ha-ico svg{
+  filter:
+    drop-shadow(0 0 8px rgba(47,163,255,.75))
+    drop-shadow(0 0 18px rgba(47,163,255,.45));
+}
+.legend.regions .region-btn{
+  /* remove cara de botão padrão */
+  -webkit-appearance: none; appearance: none; border: 0; background: none;
+  /* reaproveita o estilo do seu <li> */
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 999px;
+  padding: 8px 12px; font-weight: 600; font-size: 13px; color: #dff1ff;
+  cursor: pointer; transition: filter .2s ease, background .2s ease, box-shadow .2s ease;
+}
+.legend.regions .region-btn:hover{ filter: brightness(1.05); }
+.legend.regions .region-btn.is-active{
+  background: rgba(47,163,255,.10);
+  border-color: rgba(47,163,255,.35);
+  box-shadow: inset 0 0 0 1px rgba(47,163,255,.20);
+}
+
+/* pinos fora da região “apagados” */
+.pins .pin.is-dim{
+  opacity: .18; filter: saturate(.4) blur(.2px);
+}

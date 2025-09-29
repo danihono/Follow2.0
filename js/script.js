@@ -1,85 +1,89 @@
-// js/script.js
-document.addEventListener('DOMContentLoaded', () => {
-  // habilita os estilos animados (progressive enhancement)
-  document.body.classList.add('fx-ready');
-
-  // aplica delays automáticos se houver contêiner com data-stagger
-  document.querySelectorAll('[data-stagger]').forEach(group=>{
-    const step = parseInt(group.dataset.stagger || '120', 10);
-    let i = 0;
-    group.querySelectorAll('.reveal').forEach(el=>{
-      if (!el.dataset.delay) el.dataset.delay = String(i * step);
-      i++;
-    });
-  });
-
-  const targets = document.querySelectorAll('.reveal, .wipe');
-  if (!targets.length) return;
-
-  // Fallback: se não houver IntersectionObserver, mostra tudo
-  if (!('IntersectionObserver' in window)) {
-    targets.forEach(el => el.classList.add('in'));
-    return;
-  }
-
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      const el = entry.target;
-      const d = parseInt(el.dataset.delay || 0, 10);
-      if (d) el.style.transitionDelay = (d/1000)+'s';
-      el.classList.add('in');
-      io.unobserve(el);
-    });
-  }, { root: null, rootMargin: '0px 0px -10% 0px', threshold: 0.2 });
-
-  targets.forEach(el => io.observe(el));
-});
-// ---- Counters: contam do 0 até o alvo quando o card entra em vista ----
+// ---- Counters (versão estável: sem "pulos" e sincronizada com reveal/3D) ----
 (function(){
-  const els = document.querySelectorAll('.counter');
-  if(!els.length) return;
+  const counters = Array.from(document.querySelectorAll('.counter'));
+  if (!counters.length) return;
 
-  // mostra 0 já com prefixo/sufixo
-  els.forEach(el => {
+  // Valor inicial "0" com prefix/sufixo
+  counters.forEach(el=>{
     el.textContent = (el.dataset.prefix || '') + '0' + (el.dataset.suffix || '');
   });
 
+  // Observa o elemento mais "representativo" (card/reveal) para evitar animar fora de cena
+  const targetMap = new Map(); // watchEl -> counterEl
   const io = 'IntersectionObserver' in window
-    ? new IntersectionObserver(onIntersect, { threshold: 0.35 })
+    ? new IntersectionObserver(onIntersect, { threshold: 0.6, rootMargin: '0px 0px -10% 0px' })
     : null;
 
-  els.forEach(el => io ? io.observe(el) : run(el));
+  counters.forEach(el=>{
+    const watchEl = el.closest('.tech-card, .card, .reveal') || el;
+    targetMap.set(watchEl, el);
+    if (io) io.observe(watchEl); else start(el);
+  });
 
   function onIntersect(entries){
-    entries.forEach(entry => {
-      if(!entry.isIntersecting) return;
-      run(entry.target);
-      io.unobserve(entry.target);
+    entries.forEach(en=>{
+      if (!en.isIntersecting) return;
+      const el = targetMap.get(en.target);
+      if (!el) return;
+
+      // Só começa após o reveal (se existir)
+      waitUntilRevealed(el, ()=> start(el));
+
+      io.unobserve(en.target);
+      targetMap.delete(en.target);
     });
   }
 
-  function run(el){
-    const target   = Number(el.dataset.count || 0);
+  // Espera o pai .reveal ficar visível (classe .in ou .is-visible)
+  function waitUntilRevealed(el, cb){
+    const rev = el.closest('.reveal');
+    if (!rev) { cb(); return; }
+    if (rev.classList.contains('in') || rev.classList.contains('is-visible')) { cb(); return; }
+    const mo = new MutationObserver(()=>{
+      if (rev.classList.contains('in') || rev.classList.contains('is-visible')){
+        mo.disconnect(); cb();
+      }
+    });
+    mo.observe(rev, { attributes:true, attributeFilter:['class'] });
+  }
+
+  // Parser robusto (120.000,50 → 120000.50)
+  function parseTarget(raw){
+    if (raw == null) return 0;
+    const s = String(raw).trim().replace(/\./g,'').replace(/,/g,'.');
+    const n = Number(s);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  function start(el){
+    if (el._counting) return;
+    el._counting = true;
+
+    const target   = parseTarget(el.dataset.count || 0);
     const prefix   = el.dataset.prefix || '';
     const suffix   = el.dataset.suffix || '';
     const locale   = el.dataset.format || 'pt-BR';
-    const duration = Number(el.dataset.duration || 2500); // <-- mais lento
+    const decimals = Number(el.dataset.decimals || 0);
+    const duration = Math.max(300, Number(el.dataset.duration || 2500));
 
-    const start = performance.now();
-    const fmt = new Intl.NumberFormat(locale);
+    const fmt = new Intl.NumberFormat(locale, {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals
+    });
+    const ease = t => 1 - Math.pow(1 - t, 3); // easeOutCubic
 
-    (function tick(now){
-      const t = Math.min(1, (now - start) / duration);
-      // easeInOutQuad (suave)
-      const eased = t < .5 ? 2*t*t : -1 + (4 - 2*t)*t;
-      const val = Math.round(target * eased);
-
-      el.textContent = prefix + fmt.format(val) + suffix;
-
-      if (t < 1) requestAnimationFrame(tick);
-    })(start);
+    // *** Começa no PRIMEIRO rAF pra evitar “pulo” por atraso de frame
+    requestAnimationFrame((t0)=>{
+      const start = t0;
+      function frame(now){
+        const t = Math.min(1, (now - start) / duration);
+        const vRaw = target * ease(t);
+        const val  = decimals ? Number(vRaw.toFixed(decimals)) : Math.round(vRaw);
+        el.textContent = prefix + fmt.format(val) + suffix;
+        if (t < 1) requestAnimationFrame(frame);
+        else el.textContent = prefix + fmt.format(target) + suffix; // travo no final exato
+      }
+      frame(t0);
+    });
   }
 })();
-
-
