@@ -38,6 +38,7 @@
 <script src="js/./featuresection.js" defer></script>
 <script src="js/./presence.js" defer></script>
 <script src="js/./3d.js" defer></script>
+<script src="js/scroll.js" defer></script>
 
 
 </head>
@@ -315,7 +316,7 @@
 <br>
 
 
-  <section class ="timeline-wrap" data-tone="2" aria-labelledby="tl-title">
+  <section class ="timeline-wrap" data-tone="2" id="servicos"aria-labelledby="tl-title">
    <div class="tl-head">
     <h2 id="tl-title">Nossos Serviços</h2>
     <p class="tl-subtitle">Atendimento em Português, Inglês e Espanhol (incluindo relatórios sob demanda)</p>
@@ -568,14 +569,168 @@
     </div>
   </div>
 </section>
+<br>
+<br>
+<section class="team-section">
+  <h2 class="reveal" style="--delay:0ms">Conheça Nossa Equipe</h2>
+  <p class="subtitle reveal" style="--delay:120ms">
+    Profissionais apaixonados e dedicados a entregar os melhores resultados.
+  </p>
 
+  <!-- aplica delays automáticos nos .reveal internos -->
+  <div class="team-rows reveal" style="--delay:240ms" data-stagger="120">
 
+    <div class="lane lane-top">
+      <div class="team-member reveal">
+        <div class="front">
+          <img src="images/equipe/marcelo.jpeg" alt="Marcelo">
+          <div class="info"><h3>Marcelo Gomes</h3><p>CEO</p></div>
+        </div>
+        <div class="back">
+          <p><b>Expertise:</b> ...</p>
+          <p><b>Formação:</b> ...</p>
+          <a class="icon" href="https://www.linkedin.com/in/marcelogomes1/">
+            <div class="layer">
+              <span></span><span></span><span></span><span></span>
+              <span class="logo-linkedin">
+                <svg viewBox="0 0 448 512" height="1em">
+                  <path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"></path>
+                </svg>
+              </span>
+            </div>
+            <div class="text">LinkedIn</div>
+          </a>
+        </div>
+      </div>
 
+      <div class="team-member reveal">
+        <div class="front">
+          <img src="images\equipe\Audit in Progress (1).png" alt="Dafne"> 
+          <div class="info"><h3>Dafne Ordones</h3><p>Farmaceutica</p></div>
+        </div>
+        <div class="back">
+          <p><b>Expertise:</b> ...</p>
+          <p><b>Formação:</b> ...</p>
+          <a class="icon" href="https://www.linkedin.com/in/dafne-ordones-b30242150/">
+            <div class="layer">
+              <span></span><span></span><span></span><span></span>
+              <span class="logo-linkedin">
+                <svg viewBox="0 0 448 512" height="1em">
+                  <path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"></path>
+                </svg>
+              </span>
+            </div>
+            <div class="text">LinkedIn</div>
+          </a>
+        </div>
+      </div>
 
+      <div class="team-member reveal">
+        <div class="front">
+          <img src="images/equipe/daniel.jpg" alt="daniel">
+          <div class="info"><h3>Daniel Honorato</h3><p>Gestor TI</p></div>
+        </div>
+        <div class="back">
+          <p><b>Expertise:</b> Criação e desenvolvimento de softwares e sites</p>
+          <p><b>Formação:</b> Engenharia de Software</p>
+          <a class="icon" href="https://www.linkedin.com/in/daniel-honorato-27ba0933b/">
+            <div class="layer">
+              <span></span><span></span><span></span><span></span>
+              <span class="logo-linkedin">
+                <svg viewBox="0 0 448 512" height="1em">
+                  <path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"></path>
+                </svg>
+              </span>
+            </div>
+            <div class="text">LinkedIn</div>
+          </a>
+        </div>
+      </div>
+    </div>
 
+    <div class="lane lane-bottom">
+      <div class="team-member reveal">
+        <div class="front">
+          <img src="images/equipe/daniel.jpg" alt="Nome 4">
+          <div class="info"><h3>Nome 4</h3><p>Cargo / Função</p></div>
+        </div>
+        <div class="back">
+          <p><b>Expertise:</b> ...</p>
+          <p><b>Formação:</b> ...</p>
+          <a class="icon" href="https://linkedin.com/in/perfil-nome4">
+            <div class="layer">
+              <span></span><span></span><span></span><span></span>
+              <span class="logo-linkedin">
+                <svg viewBox="0 0 448 512" height="1em"><path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"></path></svg>
+              </span>
+            </div>
+            <div class="text">LinkedIn</div>
+          </a>
+        </div>
+      </div>
 
+      <div class="team-member reveal">
+        <div class="front">
+          <img src="images/equipe/marcelo.jpeg" alt="Nome 5">
+          <div class="info"><h3>Nome 5</h3><p>Cargo / Função</p></div>
+        </div>
+        <div class="back">
+          <p><b>Expertise:</b> ...</p>
+          <p><b>Formação:</b> ...</p>
+          <a class="icon" href="https://linkedin.com/in/perfil-nome5">
+            <div class="layer">
+              <span></span><span></span><span></span><span></span>
+              <span class="logo-linkedin">
+                <svg viewBox="0 0 448 512" height="1em"><path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"></path></svg>
+              </span>
+            </div>
+            <div class="text">LinkedIn</div>
+          </a>
+        </div>
+      </div>
 
+      <div class="team-member reveal">
+        <div class="front">
+          <img src="images\equipe\Audit in Progress (1).png" alt="Nome 6">
+          <div class="info"><h3>Nome 6</h3><p>Cargo / Função</p></div>
+        </div>
+        <div class="back">
+          <p><b>Expertise:</b> ...</p>
+          <p><b>Formação:</b> ...</p>
+          <a class="icon" href="https://linkedin.com/in/perfil-nome6">
+            <div class="layer">
+              <span></span><span></span><span></span><span></span>
+              <span class="logo-linkedin">
+                <svg viewBox="0 0 448 512" height="1em"><path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"></path></svg>
+              </span>
+            </div>
+            <div class="text">LinkedIn</div>
+          </a>
+        </div>
+      </div>
+    </div>
 
+  </div>
+</section>
+<!-- INTRO PINNED (vem ANTES da sua .team-section) -->
+<section id="team-introduction" class="team-introduction" aria-label="Introdução da equipe">
+  <div class="ti-pin">
+    <figure class="ti-bg">
+      <img src="images\equipe\tron.png" alt="Nossa equipe" loading="lazy">
+    </figure>
+
+    <div class="ti-copy">
+      <h2 class="ti-title">
+        <span class="line">UM TIME,</span>
+        <span class="line">UMA <b class="accent">FAMÍLIA.</b></span>
+      </h2>
+      <p class="ti-sub">Prontos para conhecer quem faz tudo acontecer?</p>
+    </div>
+  </div>
+</section>
+<!-- sua .team-section vem aqui em seguida -->
+
+  
                     
 </body>
 </html>
