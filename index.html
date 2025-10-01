@@ -21,6 +21,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Paaji&display=swap" rel="stylesheet">
+
 
 
     <!-- Custom CSS -->
@@ -39,6 +43,7 @@
 <script src="js/./presence.js" defer></script>
 <script src="js/./3d.js" defer></script>
 <script src="js/scroll.js" defer></script>
+<script src="js/fallback.js" defer></script>
 
 
 </head>
@@ -245,52 +250,51 @@
 </div>
 </div>
   </div>
-<section class="presenca geo-hero" id="presenca" data-tone="3" aria-labelledby="geo-title">
-  <h2 id="geo-title" class="geo-title">Presença nas Américas</h2>
+<section class="presenca geo-hero reveal" id="presenca" data-tone="3" aria-labelledby="geo-title" data-delay="0">
+  <h2 id="geo-title" class="geo-title reveal" data-delay="100">Presença nas Américas</h2>
 
   <div class="geo-wrap">
     <!-- MAPA como background -->
-    <div class="geo-map"> <img src="images\Image_fx (60).jpg" alt="mapa">
-      <!-- Overlay de pinos -->
-     <!-- ... -->
-  <div class="pins">
-    <button class="pin pin--dc"  style="--x:45.3%; --y:67.5%" data-id="sp"   data-city="São Paulo"></button>
-    <button class="pin pin--dc" style="--x:48.5%; --y:65.9%" data-id="rj"   data-city="Rio de Janeiro"></button>
-    <button class="pin pin--dc"style="--x:48.7%; --y:61.0%" data-id="ba"   data-city="Bahia"></button>
-    <button class="pin pin--dc"  style="--x:44.9%; --y:59.5%" data-id="bsb"  data-city="Brasilia"></button>
-    <button class="pin pin--yard" style="--x:38.0%; --y:50.7%" data-id="bog"  data-city="Bogotá"></button>
-    <button class="pin pin--truck"style="--x:35.1%; --y:36.7%" data-id="mia"  data-city="Miami"></button>
-    <button class="pin pin--truck"style="--x:30.7%; --y:42.9%" data-id="mex"  data-city="México"></button>
-    <button class="pin pin--yard"style="--x:41.9%; --y:75.4%" data-id="bue"  data-city="Buenos Aires"></button>
-  </div>
+    <div class="geo-map reveal" data-delay="200">
+      <img src="images/Image_fx (60).jpg" alt="mapa">
+      
+      <!-- Overlay de pinos (com stagger automático) -->
+      <div class="pins" data-stagger="120">
+        <button class="pin pin--dc reveal"  style="--x:45.3%; --y:67.5%" data-id="sp"   data-city="São Paulo"></button>
+        <button class="pin pin--dc reveal"  style="--x:48.5%; --y:65.9%" data-id="rj"   data-city="Rio de Janeiro"></button>
+        <button class="pin pin--dc reveal"  style="--x:48.7%; --y:61.0%" data-id="ba"   data-city="Bahia"></button>
+        <button class="pin pin--dc reveal"  style="--x:44.9%; --y:59.5%" data-id="bsb"  data-city="Brasilia"></button>
+        <button class="pin pin--yard reveal"style="--x:38.0%; --y:50.7%" data-id="bog"  data-city="Bogotá"></button>
+        <button class="pin pin--truck reveal"style="--x:35.1%; --y:36.7%" data-id="mia"  data-city="Miami"></button>
+        <button class="pin pin--truck reveal"style="--x:30.7%; --y:42.9%" data-id="mex"  data-city="México"></button>
+        <button class="pin pin--yard reveal"style="--x:41.9%; --y:75.4%" data-id="bue"  data-city="Buenos Aires"></button>
+      </div>
 
-  <!-- SVG vazio: os arcos serão inseridos por JS -->
-  <svg class="geo-arcs" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <!-- SVG dos arcos -->
+      <svg class="geo-arcs reveal" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true" data-delay="300"></svg>
 
-
-      <!-- Tooltip simples (preenchido via CSS attr) -->
+      <!-- Tooltip -->
       <div class="tooltip" role="status" aria-live="polite"></div>
     </div>
 
-    <!-- Coluna lateral: legenda + CTA -->
-    <aside class="geo-panel" aria-label="Legenda e ações">
-      <ul class="legend regions">
-  <li><button type="button" class="region-btn" data-region="north">
-    <span class="dot dot--truck"></span> América do Norte
-  </button></li>
+    <!-- Coluna lateral -->
+    <aside class="geo-panel reveal" aria-label="Legenda e ações" data-delay="250">
+      <ul class="legend regions" data-stagger="100">
+        <li class="reveal"><button type="button" class="region-btn" data-region="north">
+          <span class="dot dot--truck"></span> América do Norte
+        </button></li>
 
-  <li><button type="button" class="region-btn" data-region="latam">
-    <span class="dot dot--yard"></span> América Latina
-  </button></li>
+        <li class="reveal"><button type="button" class="region-btn" data-region="latam">
+          <span class="dot dot--yard"></span> América Latina
+        </button></li>
 
-  <li><button type="button" class="region-btn" data-region="brazil">
-    <span class="dot dot--dc"></span> Brasil
-  </button></li>
-</ul>
+        <li class="reveal"><button type="button" class="region-btn" data-region="brazil">
+          <span class="dot dot--dc"></span> Brasil
+        </button></li>
+      </ul>
 
-
-      <h3 class="panel-title">Cobertura logística nas Américas</h3>
-      <a class="cta" href="#contato">
+      <h3 class="panel-title reveal" data-delay="300">Cobertura logística nas Américas</h3>
+      <a class="cta reveal" href="#contato" data-delay="400">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 1 0 18 9 9 0 0 1 0-18Zm1.06 5.44 3.5 3.5a1.5 1.5 0 0 1 0 2.12l-3.5 3.5a1 1 0 1 1-1.42-1.42l2.44-2.44H7a1 1 0 1 1 0-2h7.08l-2.44-2.44a1 1 0 0 1 1.42-1.42Z"/></svg>
         Explorar localidades
       </a>
@@ -298,22 +302,9 @@
   </div>
 </section>
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+</section>
 
 
-<!-- DIVISÃO – Alcance Global -->
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 
 
   <section class ="timeline-wrap" data-tone="2" id="servicos"aria-labelledby="tl-title">
@@ -572,7 +563,7 @@
 <br>
 <br>
 <section class="team-section">
-  <h2 class="reveal" style="--delay:0ms">Conheça Nossa Equipe</h2>
+  <h2 class="reveal" id="equipe" style="--delay:0ms">Conheça Nossa Equipe</h2>
   <p class="subtitle reveal" style="--delay:120ms">
     Profissionais apaixonados e dedicados a entregar os melhores resultados.
   </p>
@@ -730,11 +721,112 @@
         <span class="line">UM TIME,</span>
         <span class="line">UMA <b class="accent">FAMÍLIA.</b></span>
       </h2>
-      <p class="ti-sub">Prontos para conhecer quem faz tudo acontecer?</p>
+      <!-- Botão/Link com o SVG (azul) -->
+      <div class="ti-row reveal" data-stagger="120" data-delay="500">
+  <a href="/trabalhe-conosco" class="icon-btn reveal" aria-label="Ir para Trabalhe Conosco">
+    <!-- SVG -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="28" height="28" aria-hidden="true">
+      <rect width="256" height="256" fill="none"/>
+      <circle cx="128" cy="128" r="96" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
+      <line x1="88" y1="128" x2="168" y2="128" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
+      <polyline points="136 96 168 128 136 160" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
+    </svg>
+  </a>
+  <p class="ti-sub reveal">Seja parte dessa equipe!</p>
+</div>
+
+    
     </div>
   </div>
 </section>
-<!-- sua .team-section vem aqui em seguida -->
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<section id="clientes" class="partners-split section" aria-labelledby="partners-title">
+  <div class="ps-grid">
+  <!-- ESQUERDA: frases com reveal -->
+  <div class="ps-left">
+    <h2 id="partners-title" class="ps-title reveal" data-delay="150">Clientes & Parcerias</h2>
+
+    <ol class="ps-steps" data-stagger="140">
+      <li class="ps-step reveal is-current" data-step="01">
+        <h3 class="ps-h"> Farmacêutica</h3>
+        <p class="ps-p">Conduzimos o processo completo de registro de produtos junto às autoridades regulatórias, além de desenhar e executar uma estratégia de softlanding para a empresa no Brasil. Incluiu a estruturação societária, obtenção de licenças sanitárias e alinhamento com parceiros locais.</p>
+
+        <figure class="tech-card">
+          <img src="images\cards\Image_fx (66).jpg" alt="Integração com transportadoras e marketplaces">
+        </figure>
+      </li>
+
+      <li class="ps-step reveal" data-step="02">
+        <h3 class="ps-h">Agronegócio</h3>
+        <p class="ps-p">Desenvolvemos o desenho estratégico e a execução do supply chain, incluindo:.</p>
+
+        <figure class="tech-card">
+          <img src="images\cards\Image_fx (67).jpg" alt="Painel de KPIs e rastreio em tempo real">
+        </figure>
+      </li>
+
+      <li class="ps-step reveal" data-step="03">
+        <h3 class="ps-h">Logística</h3>
+        <p class="ps-p">: Atuamos desde o planejamento fabril até a execução, englobando: licenciamento, cadeia de suprimentos, homologação de fornecedores locais e compliance regulatório.</p>
+
+        <figure class="tech-card">
+          <img src="images\cards\Image_fx (68).jpg" alt="Sessão de co-criação com clientes">
+        </figure>
+      </li>
+
+      <li class="ps-step reveal" data-step="04">
+        <h3 class="ps-h">Armazéns </h3>
+        <p class="ps-p"> Estruturamos um programa completo de qualidade e segurança:</p>
+
+        <figure class="tech-card">
+          <img src="images\cards\Image_fx (69).jpg" alt="Ecossistema aberto com APIs e webhooks">
+        </figure>
+      </li>
+    </ol>
+  </div>
+
+
+
+    <!-- DIREITA: wrapper STICKY limpo (sem reveal/transform aqui) -->
+<div class="ps-right">
+  <div class="ps-stick">
+    <figure class="ps-asset reveal"> <!-- ou: class="ps-asset ps-asset--bleed" -->
+
+      <video class="ps-video"
+             src="images/video/Apresentao FollowAcademy logvett.mp4"
+             muted autoplay loop playsinline preload="auto"
+             aria-label="Vídeo de clientes e parcerias">
+      </video>
+
+      <figcaption class="ps-cap" hidden>
+        <!-- Se quiser texto aqui depois, remova o hidden -->
+      </figcaption>
+    </figure>
+  </div>
+</div>
+  </div>
+
+</section>
+<br>
+<br>
+<section class="logo-marquee" aria-label="Clientes & Parcerias">
+  <div class="logo-track">
+    <hr>
+    <img src="images\Johnson-Johnson-Logo.png" alt="Johnson">
+    <img src="images\gral.jpeg" alt="Michael Lewis Company">
+    <img src="images\GRU.jpeg" alt="Nature's Bakery">
+    
+    <hr>
+  </div>
+</section>
+
+  
+</section>
 
   
                     

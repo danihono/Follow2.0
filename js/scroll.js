@@ -53,3 +53,47 @@
   unsetIdle();  // inicia timer
   render();     // primeira pintura
 })();
+
+(function partnersReveal(){
+  // garante .fx-ready no body (se teu script global já faz isso, ok)
+  if (!document.body.classList.contains('fx-ready')) {
+    document.addEventListener('DOMContentLoaded', ()=>document.body.classList.add('fx-ready'), {once:true});
+  }
+
+  const targets = document.querySelectorAll('#clientes .ps-step.reveal, #clientes .ps-title.reveal');
+  if (!targets.length) return;
+
+  const io = new IntersectionObserver((entries, obs)=>{
+    entries.forEach(en=>{
+      if (en.isIntersecting){
+        en.target.classList.add('in');   // revela o item
+        obs.unobserve(en.target);        // revela só 1x (tire se quiser repetir)
+      }
+    });
+  }, {
+    threshold: 0.15,            // mais permissivo para steps altos (~90vh)
+    rootMargin: '0px 0px -10% 0px'
+  });
+
+  targets.forEach(el=>io.observe(el));
+
+  // se tiver imagens grandes dentro dos steps, recalcule depois que carregarem
+  document.querySelectorAll('#clientes .ps-step img').forEach(img=>{
+    if (!img.complete) img.addEventListener('load', ()=>io.observe(img.closest('.ps-step')), {once:true});
+  });
+})();
+
+// aplica delays crescentes nos filhos .reveal
+(function partnersStagger(){
+  const group = document.querySelector('#clientes .ps-steps');
+  if (!group) return;
+  const step = parseInt(group.getAttribute('data-stagger') || '140', 10);
+  let i = 0;
+  group.querySelectorAll('.reveal').forEach(el=>{
+    if (!el.dataset.delay) el.dataset.delay = String(i * step);
+    i++;
+    // usa o data-delay na transição
+    const d = parseInt(el.dataset.delay, 10) || 0;
+    el.style.transitionDelay = (d/1000) + 's';
+  });
+})();

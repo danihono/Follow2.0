@@ -2312,9 +2312,10 @@ body{
   border-radius: 16px;
   overflow: hidden;
   background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 10px 34px rgba(0,0,0,.35);
   perspective: 1000px;
+  
 }
 
 .team-member .front,
@@ -2328,6 +2329,7 @@ body{
   backface-visibility: hidden;
   transition: transform .6s ease;
   border-radius: 16px;
+  
 }
 
 .team-member .front{
@@ -2339,6 +2341,7 @@ body{
   object-fit: cover;
   border-radius: 16px 16px 0 0;
   display: block;
+  
 }
 .team-member .info{ text-align: left; }
 .team-member h3{ margin: 8px 0 2px; font-size: 1.1rem; }
@@ -2478,16 +2481,7 @@ body{
 /* SUGESTÃO: Adicionar um estilo para o .back se você precisar de alinhamento.
   Se o seu cartão virar, o conteúdo do .back deve ser alinhado.
 */
-.team-member .back {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around; /* Distribui o conteúdo (expertise, formação, botão) */
-    align-items: center; /* Centraliza horizontalmente o conteúdo, incluindo o botão */
-    text-align: center;
-    padding: 20px; /* Adicione padding se necessário */
-    /* Garante que o .back seja um contêiner de posicionamento para o .icon */
-    position: relative; 
-}
+
 .team-member .back{
   display: flex;
   flex-direction: column;
@@ -2937,4 +2931,685 @@ body{
 /* garante centralização do conteúdo */
 .team-section{
   margin: 0 auto;
+}
+.icon-btn{
+  --btn-color: var(--accent, #2FA3FF);
+  color: var(--btn-color);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:40px; height:40px;
+  border-radius:999px;
+  transition: transform .2s ease, opacity .2s ease;
+}
+.icon-btn:hover{ transform: translateY(-2px); opacity:.9; }
+.icon-btn:focus-visible{ outline: 2px solid var(--btn-color); outline-offset: 2px; }
+.ti-row{
+  display:flex;
+  align-items:center;   /* alinha verticalmente */
+  gap:10px;             /* espaço entre ícone e texto */
+}
+.icon-btn{
+  display:inline-flex;  /* garante que não quebre linha */
+  align-items:center;
+  justify-content:center;
+  width:40px; height:40px;
+  color: var(--accent, #2FA3FF);
+  border-radius:999px;
+}
+.ti-sub{ margin:0; }
+
+/* NUNCA aplique transform no container do sticky */
+#clientes{ /* pode ter fade, mas sem translate */
+  /* se usa .reveal no section, troque por: */
+  opacity: 1; /* deixe como está e use reveal só nos filhos */
+}
+
+.partners-split{
+  --sticky-top: clamp(12px, 6vh, 40px);
+  --g: clamp(16px, 4vw, 40px);
+  padding-block: clamp(32px, 6vw, 80px);
+  
+}
+
+.ps-grid{
+  display:grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  gap: var(--g);
+  align-items:start;
+}
+
+/* libera overflow em toda a cadeia do sticky */
+#clientes, #clientes .ps-grid, #clientes .ps-right{
+  overflow: visible;
+}
+
+.ps-left .ps-title{ margin:0 0 16px; font-size:clamp(1.8rem,3.6vw,3rem); }
+.ps-steps{ list-style:none; padding:0; margin:0; }
+.ps-step{
+  min-height: 90vh;
+  display:grid; align-content:center; gap:.5rem;
+  padding-block: clamp(24px, 6vh, 48px);
+  border-left:2px solid rgba(255,255,255,.08);
+  padding-left:16px; position:relative;
+}
+.ps-step::before{
+  content:attr(data-step);
+  position:absolute; left:-28px; top:12px;
+  font-size:.8rem; opacity:.35;
+}
+
+/* STICKY limpo */
+.ps-right{ position:relative; align-self:start; }
+.ps-stick{ position: sticky; top: var(--sticky-top); }
+.ps-asset{
+  border-radius:20px; overflow:hidden;
+  background: radial-gradient(80% 80% at 75% 25%, rgba(255,255,255,.06), rgba(0,0,0,.6));
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 12px 40px rgba(0,0,0,.35);
+  min-height:min(68vh, 720px);
+  display:grid; place-items:center;
+}
+.ps-video{ width:100%; height:100%; object-fit:cover; display:block; }
+.ps-cap{
+  position:absolute; left:16px; bottom:14px;
+  display:inline-flex; gap:8px;
+  background:rgba(0,0,0,.45);
+  border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(8px);
+  padding:6px 10px; border-radius:999px; font-size:.9rem;
+}
+
+/* Reveal padrão só nos filhos (título e steps) */
+.reveal{ opacity:0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+.fx-ready .reveal.in{ opacity:1; transform:none; }
+
+/* responsivo */
+@media (max-width: 960px){
+  .ps-grid{ grid-template-columns:1fr; }
+  .ps-stick{ position:relative; top:0; }
+  .ps-asset{ min-height:48vh; order:-1; }
+  .ps-step{ min-height:64vh; }
+}
+/* fonte e cores do exemplo */
+/* Fonte parecida com a do site (Söhne/GT America vibe) */
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700&display=swap');
+
+:root{
+  --title-font: "Inter Tight", Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --ink: #0b2d2b;            /* verde petróleo aproximado dos títulos */
+  --muted: rgba(0,0,0,.14);  /* para linhas “fantasma” */
+}
+
+/* ===== coluna ESQUERDA: título e parágrafo ===== */
+#clientes .ps-h{
+  font-family: var(--title-font);
+  font-weight: 700;                 /* 600 se achar pesado */
+  letter-spacing: -0.015em;
+  line-height: 1.06;
+  font-size: clamp(28px, 5.2vw, 56px);   /* ajuste para o seu grid */
+  color: var(--ink);
+  margin: 0 0 .6rem 0;
+
+  /* reveal suave (compatível com seu .reveal/.in) */
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.fx-ready #clientes .ps-step.reveal.in .ps-h{
+  opacity: 1;
+  transform: none;
+}
+
+#clientes .ps-p{
+  font-family: var(--title-font);
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  font-size: clamp(14px, 1.4vw, 18px);
+  line-height: 1.35;
+  color: rgba(0,0,0,.75);           /* ajuste se fundo for escuro */
+  margin: 0;
+  transition: opacity .35s ease;
+}
+
+/* “fantasma” nas próximas frases (igual vibe do site) */
+#clientes .ps-step{
+  opacity: .25;
+  transition: opacity .35s ease;
+}
+#clientes .ps-step.in,
+#clientes .ps-step.is-current{
+  opacity: 1;
+}
+
+/* máscara vertical suave para o bloco de texto (fade top/bottom) */
+#clientes .ps-left{
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 8%, #000 92%, transparent 100%);
+          mask-image: linear-gradient(to bottom, transparent 0, #000 8%, #000 92%, transparent 100%);
+}
+
+/* ===== coluna DIREITA (sticky permanece como você já tem) ===== */
+/* não aplique transform no sticky/wrappers; mantemos só o vídeo e caption */
+#clientes .ps-asset .ps-cap{
+  font-family: var(--title-font);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* ===== responsivo fino ===== */
+@media (max-width: 960px){
+  #clientes .ps-h{ font-size: clamp(26px, 7vw, 40px); }
+  #clientes .ps-left{
+    -webkit-mask-image: none;
+            mask-image: none;
+  }
+}
+
+/* (opcional) se seu site tem tema escuro nessa seção, troque os tons: */
+/*
+#clientes .ps-h{ color:#e9f0ef; }
+#clientes .ps-p{ color: rgba(255,255,255,.76); }
+#clientes .ps-step{ opacity:.18; }
+*/
+
+
+/* Use a fonte e evite faux-bold */
+/* ===== fonte & cores ===== */
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700&display=swap');
+:root{
+  --font-title: "Inter Tight", Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --white: #fff;
+  --blue:  #1e90ff; /* faixa azul sutil */
+}
+
+/* ===== títulos dos steps (lado esquerdo) ===== */
+#clientes .ps-h{
+  font-family: var(--font-title);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.06;
+  font-size: clamp(28px, 5.2vw, 56px);
+  margin: 0 0 .6rem;
+  color: var(--white);           /* sempre branco na base */
+  text-shadow: none;
+
+  /* entra com seu reveal padrão */
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.fx-ready #clientes .ps-step.reveal.in .ps-h{
+  opacity: 1;
+  transform: none;
+}
+
+/* ===== estados de foco x fora de foco ===== */
+/* padrão: tudo fora de foco mais translúcido */
+#clientes .ps-step{
+  opacity: .22;                     /* anterior/próximo: acinzentados */
+  transition: opacity .35s ease;
+}
+#clientes .ps-step.is-current{
+  opacity: 1;                       /* foco total */
+}
+
+/* o parágrafo herda essa opacidade automaticamente */
+#clientes .ps-p{
+  font-family: var(--font-title);
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  font-size: clamp(14px, 1.4vw, 18px);
+  line-height: 1.35;
+  color: rgba(255,255,255,.80);
+  margin: 0;
+}
+
+/* ===== leve animação de cor SÓ quando vira current =====
+   técnica: gradiente animado clipado no texto (sem sombra) */
+#clientes .ps-step.is-current .ps-h{
+  background-image: linear-gradient(
+    90deg,
+    var(--white) 0%,
+    var(--white) 40%,
+    var(--blue) 50%,
+    var(--white) 60%,
+    var(--white) 100%
+  );
+  background-size: 220% 100%;
+  background-position: -60% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;  /* mostra o gradiente dentro das letras */
+  animation: sweepBlue 1.6s ease-out forwards;
+}
+
+/* animação sutil da faixa azul */
+@keyframes sweepBlue{
+  from { background-position: -60% 50%; }
+  to   { background-position: 160% 50%; }
+}
+
+/* acessibilidade: sem animação se usuário pedir menos movimento */
+@media (prefers-reduced-motion: reduce){
+  #clientes .ps-step.is-current .ps-h{ animation: none; background-position: 100% 50%; }
+}
+
+
+/* Texto branco fora do foco */
+#clientes .ps-step .ps-h{
+  color:#fff;
+  text-transform: uppercase;
+  background: none;
+  -webkit-background-clip: initial;
+          background-clip: initial;
+  -webkit-text-fill-color: initial;
+}
+
+/* Efeito gradiente animado SÓ no step atual */
+#clientes .ps-step.is-current .ps-h{
+  --grad: linear-gradient(-225deg,
+            #2c0ef6 0%,
+            #3437ec 29%,
+            #314ff9 67%,
+            #eff0f0 100%);
+  background-image: var(--grad);
+  background-size: 200% auto;
+  background-position: 0% 50%;
+
+  /* estes 3 são essenciais; deixam o texto “transparente”
+     para o gradiente aparecer DENTRO das letras */
+  -webkit-background-clip: text !important;
+          background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+
+  animation: textclip 2s linear infinite;
+}
+
+/* Ghost: anteriores/próximos mais apagados */
+#clientes .ps-step{ opacity:.22; transition: opacity .35s ease; }
+#clientes .ps-step.is-current{ opacity:1; }
+
+@keyframes textclip { to { background-position: 200% 50%; } }
+/* título fixo sem sombra/gradiente */
+#clientes .ps-title{
+  color:#fff;
+  text-shadow:none;
+  background:none;
+  -webkit-background-clip: initial;
+          background-clip: initial;
+  -webkit-text-fill-color: initial;
+}
+/* estado inicial (antes do .in) */
+#clientes .ps-step .ps-h,
+#clientes .ps-step .ps-p{
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+
+/* quando o step revela, mostra h3 e p */
+.fx-ready #clientes .ps-step.reveal.in .ps-h,
+.fx-ready #clientes .ps-step.reveal.in .ps-p{
+  opacity: 1;
+  transform: none;
+}
+/* === TÍTULO "Clientes & Parcerias" — reset total === */
+section#clientes .ps-title{
+  /* tipografia */
+  font-family:"Bebas Neue", system-ui, sans-serif;
+  font-size: clamp(2.8rem, 9.2vw, 8rem);
+  line-height: .92;
+  margin: 0 0 .35em;
+
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.06;
+  text-align: center;
+  font-size: clamp(28px, 5.2vw, 56px);
+
+  /* cor sólida (NADA de gradiente/clip) */
+  color: #fff !important;
+  text-shadow: none !important;
+  background: none !important;
+  -webkit-background-clip: initial !important;
+          background-clip: initial !important;
+  -webkit-text-fill-color: initial !important;
+
+  /* espaçamento */
+  margin: 0 0 clamp(12px, 2.2vw, 20px) 0;
+}
+
+/* reveal só no título (usa seu .reveal → .in) */
+section#clientes .ps-title.reveal{
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.fx-ready section#clientes .ps-title.reveal.in{
+  opacity: 1;
+  transform: none;
+}
+
+/* se você aplicou máscara na coluna, evite cortar o título */
+section#clientes .ps-left{ -webkit-mask-image: none; mask-image: none; }
+section#clientes .ps-steps{
+  /* aplica a máscara só na lista, não no título */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 48px, #000 calc(100% - 48px), transparent 100%);
+          mask-image: linear-gradient(to bottom, transparent 0, #000 48px, #000 calc(100% - 48px), transparent 100%);
+}
+/* ===== 0) base de fonte e cores ===== */
+#clientes .ps-step.is-current{ border-left-color: linear-gradient(#1e90ff,#7fb8ff); border-left-color: #1e90ff; }
+#clientes .ps-step.is-current{ box-shadow: inset 3px 0 0 0 #1e90ff22; }
+/* ===== 0) base de fonte e cores ===== */
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700&display=swap');
+:root{
+  --font-title: "Inter Tight", Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --ink: #eaf3ff;       /* branco-azulado para títulos em fundo escuro */
+  --body: rgba(255,255,255,.80);
+  --muted: rgba(255,255,255,.22);
+  --blue1: #1e90ff;     /* faixa azul do efeito */
+  --blue2: #7fb8ff;
+}
+
+/* ===== 1) fundo da seção com depth (radial + noise leve) ===== */
+section#clientes{
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(120% 120% at 85% 10%, rgba(26, 57, 137, 0.25) 0%, rgba(5,7,12,0) 60%),
+    radial-gradient(140% 140% at -20% 40%, rgba(0,145,255,.08) 0%, rgba(0,0,0,0) 60%),
+    #0e0f12; /* sua base escura */
+}
+section#clientes::before{
+  /* ruído finíssimo pra quebrar o flat */
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+
+  /* SVG inline (data URI) – tudo numa linha e com escapes */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 140px 140px;
+
+  opacity: .35;
+  mix-blend-mode: soft-light;
+}
+
+
+/* ===== 2) tipografia / título ===== */
+#clientes .ps-title{
+  font-family: var(--font-title);
+  font-weight: 1000;
+  letter-spacing: -0.015em; 
+  font-size: clamp(28px, 5.2vw, 56px);
+  color: var(--ink) !important;
+  text-shadow: none !important;
+  background: none !important;
+  -webkit-text-fill-color: initial !important;
+  margin: 0 0 clamp(16px, 3vw, 28px);
+}
+/* reveal suave do título (usa seu .reveal → .in) */
+#clientes .ps-title.reveal{ opacity:0; transform:translateY(12px); transition:opacity .6s, transform .6s; }
+.fx-ready #clientes .ps-title.reveal.in{ opacity:1; transform:none; }
+
+/* ===== 3) spacing e estados dos steps ===== */
+#clientes .ps-steps{
+  display:grid;
+  row-gap: clamp(28px, 4vh, 44px);  /* mais respiro entre frases */
+}
+#clientes .ps-step{
+  display:grid; row-gap:.6rem;
+  border-left: 2px solid var(--muted);
+  padding-left: 16px;
+  min-height: 88vh;                 /* mantém a troca suave por viewport */
+  opacity:.22; transition: opacity .35s ease;
+}
+#clientes .ps-step.is-current{ opacity:1; }
+
+/* textos */
+#clientes .ps-h{
+  font-family: var(--font-title);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.06;
+  font-size: clamp(26px, 5vw, 52px);
+  margin: 0;
+  color: var(--ink);                /* base branco-azulado */
+  opacity:0; transform:translateY(12px); transition:opacity .6s, transform .6s;
+  
+}
+#clientes .ps-p{
+  font-family: var(--font-title);
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  font-size: clamp(14px, 1.5vw, 18px);
+  line-height: 1.45;
+  margin:0; color: var(--body);
+  opacity:0; transform:translateY(10px); transition:opacity .6s, transform .6s .02s;
+}
+/* reveal dos textos quando o step entra */
+.fx-ready #clientes .ps-step.reveal.in .ps-h,
+.fx-ready #clientes .ps-step.reveal.in .ps-p{ opacity:1; transform:none; }
+
+/* ===== 4) efeito "faixa azul varrendo" apenas no step atual ===== */
+#clientes .ps-step.is-current .ps-h{
+  background-image: linear-gradient(90deg,
+    var(--ink) 0%,
+    var(--ink) 40%,
+    var(--blue1) 52%,
+    var(--ink) 64%,
+    var(--ink) 100%
+  );
+  background-size: 220% 100%;
+  background-position: -60% 50%;
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent; -webkit-text-fill-color: transparent;
+  animation: sweepBlue 1.4s ease-out forwards;
+}
+@keyframes sweepBlue{ to { background-position: 160% 50%; } }
+@media (prefers-reduced-motion: reduce){
+  #clientes .ps-step.is-current .ps-h{ animation:none; background-position: 100% 50%; }
+}
+
+/* ===== 5) vídeo premium (moldura, glow, vinheta) ===== */
+#clientes .ps-asset{
+  position: relative;
+  border-radius: 22px;
+  overflow: clip;
+  background: radial-gradient(100% 120% at 75% 0%, rgba(255,255,255,.06), rgba(0,0,0,.65));
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow:
+    0 20px 60px rgba(0,0,0,.45),
+    inset 0 0 0 1px rgba(255,255,255,.06);
+}
+#clientes .ps-asset::after{
+  /* vinheta suave nas bordas pra valorizar o vídeo */
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background: radial-gradient(90% 90% at 50% 50%, rgba(0,0,0,0) 60%, rgba(0,0,0,.35) 100%);
+}
+#clientes .ps-video{ width:100%; height:100%; object-fit:cover; display:block; }
+#clientes .ps-cap{
+  position:absolute; left:14px; bottom:12px;
+  font-family: var(--font-title); font-weight:600; letter-spacing:-.01em;
+  background: rgba(0,0,0,.45);
+  border: 1px solid rgba(255,255,255,.14);
+  backdrop-filter: blur(8px);
+  padding:6px 10px; border-radius:999px; color:#fff;
+}
+
+/* ===== 6) responsivo ===== */
+@media (max-width: 960px){
+  #clientes .ps-title{ font-size: clamp(24px, 7vw, 40px); }
+  #clientes .ps-h{ font-size: clamp(22px, 7vw, 36px); }
+  #clientes .ps-step{ min-height: 62vh; }
+}
+#clientes .ps-logos{
+  position:absolute; right:12px; bottom:12px;
+  display:grid; grid-template-columns:repeat(2,auto); gap:10px; opacity:.35;
+  filter: grayscale(1) contrast(1.1);
+}
+#clientes .ps-logos img{ height:20px; width:auto; }
+/* sticky fica preso a partir deste offset */
+.ps-stick{
+  position: sticky;
+  top: clamp(12px, 6vh, 40px);   /* <- seu --sticky-top */
+}
+
+/* o figure precisa ocupar ATÉ O FIM DA TELA */
+.ps-asset{
+  /* ocupa do topo sticky até o rodapé da viewport */
+  height: calc(100dvh - clamp(12px, 6vh, 40px));
+  min-height: calc(100dvh - clamp(12px, 6vh, 40px));
+  /* restante do seu estilo pode ficar como estava */
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 12px 40px rgba(0,0,0,.35);
+}
+
+/* garante que o figure não “empurre” nada com margem padrão */
+.ps-asset{ margin: 0; }
+
+/* vídeo continua cobrindo tudo */
+.ps-video{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* ===== Logo marquee ===== */
+.logo-marquee{
+  --speed: 42s;                          /* ajuste a velocidade */
+  --gap: clamp(32px, 5vw, 72px);         /* espaço entre logos */
+  position: relative;
+  overflow: hidden;
+  padding: clamp(14px, 2vw, 22px) 0;
+}
+
+/* fade nas bordas (suave) */
+.logo-marquee{
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+}
+
+/* trilha que desliza */
+.logo-track{
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap);
+  white-space: nowrap;       /* evita quebra */
+  will-change: transform;
+  animation: lm-scroll var(--speed) linear infinite;
+}
+
+/* pausa no hover/ao focar */
+.logo-marquee:hover .logo-track,
+.logo-marquee:focus-within .logo-track{
+  animation-play-state: paused;
+}
+
+/* cada logo */
+.logo-track img{
+  height: clamp(22px, 3.6vw, 46px);   /* controla a altura dos logos */
+  width: auto;
+  filter: grayscale(1) contrast(1.05) brightness(.85);
+  opacity: .2;
+  transition: filter .2s ease, opacity .2s ease, transform .2s ease;
+  pointer-events: none;               /* só estética; tira click dos imgs */
+}
+
+/* destaque no hover da faixa (opcional) */
+.logo-marquee:hover img{
+  opacity: 1;
+  filter: grayscale(.2) contrast(1) brightness(.95);
+}
+
+/* animação */
+@keyframes lm-scroll{
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }   /* 50% porque duplicamos via JS */
+}
+
+/* responsivo: um pouco mais rápido no mobile, logos menores */
+@media (max-width: 700px){
+  .logo-marquee{ --speed: 30s; }
+}
+
+/* acessibilidade */
+@media (prefers-reduced-motion: reduce){
+  .logo-track{ animation: none; }
+}
+/* ===== Logos SEM dessaturar ===== */
+.logo-marquee .logo-track img{
+  height: clamp(22px, 3.6vw, 46px);
+  width: auto;
+  /* tira o cinza e o escurecimento */
+  filter: none !important;
+  opacity: 1 !important;
+  transition: transform .2s ease; /* mantém só um micro-efeito se quiser */
+}
+
+/* Hover só com leve lift/scale (sem mexer em cor) */
+.logo-marquee:hover .logo-track img{
+  filter: none !important;
+  opacity: 1 !important;
+}
+.logo-marquee .logo-track img:hover{
+  transform: translateY(-2px) scale(1.02);
+}
+/* Azul principal (ajuste se quiser) */
+:root{
+  --ink: #ffffff;          /* cor base do texto */
+  --blue1: #1EA0FF;        /* azul claro */
+  --blue2: #0B78FF;        /* azul mais profundo */
+}
+
+/* Faixa azul varrendo – mais lenta e mais azul */
+#clientes .ps-step.is-current .ps-h{
+  /* faixa mais larga e com 2 azuis no centro */
+  background-image: linear-gradient(
+    90deg,
+    var(--ink)   0%,
+    var(--ink)  34%,
+    var(--blue2) 45%,
+    var(--blue1) 50%,
+    var(--blue2) 55%,
+    var(--ink)   66%,
+    var(--ink) 100%
+  );
+  background-size: 260% 100%;
+  background-position: -80% 50%;
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent; 
+  -webkit-text-fill-color: transparent;
+
+  /* mais lento (2.4s) e com easing suave */
+  animation: sweepBlue 10s cubic-bezier(.22,.7,.2,1) forwards;
+
+  /* leve brilho para dar nitidez ao azul durante a varredura */
+  text-shadow: 0 0 0 rgba(0,0,0,0); /* reset */
+}
+#clientes .ps-step.is-current .ps-h::selection{
+  -webkit-text-fill-color: #fff; /* seleção legível */
+}
+
+/* animação: desloca o gradiente de esquerda → direita */
+@keyframes sweepBlue{
+  to { background-position: 140% 50%; }
+}
+
+/* acessibilidade */
+@media (prefers-reduced-motion: reduce){
+  #clientes .ps-step.is-current .ps-h{
+    animation: none;
+    background-position: 100% 50%;
+  }
 }
